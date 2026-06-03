@@ -514,6 +514,7 @@ function fillIntro() {
 }
 
 function bindControls() {
+  audio.onStatus = (s) => { lastStatus = s; updateSoundBtn(); };
   $("#begin").addEventListener("click", () => {
     hideIntro();
     scrollToEra(0);
@@ -534,12 +535,15 @@ function bindControls() {
   });
 }
 
+let lastStatus = "synth"; // whether the current era is playing a real song or the synth band
 function updateSoundBtn() {
   const on = audio.isEnabled();
   const btn = $("#sound-toggle");
+  if (!btn) return;
   btn.classList.toggle("on", on);
   btn.setAttribute("aria-pressed", String(on));
-  btn.querySelector(".s-label").textContent = on ? "Sound on" : "Sound off";
+  btn.querySelector(".s-label").textContent =
+    on ? (lastStatus === "song" ? "♪ Song" : "♪ Synth band") : "Sound off";
 }
 
 function main() {

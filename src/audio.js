@@ -79,6 +79,7 @@ export class AudioEngine {
     this._step = 0; this._nextTime = 0;
     this._lastChange = 0;
     this._fileProto = (typeof location !== "undefined" && location.protocol === "file:");
+    this.onStatus = null;      // callback(mode) -> "song" | "synth"
   }
 
   /* ---------------- graph ---------------- */
@@ -129,8 +130,17 @@ export class AudioEngine {
     const el = new Audio();
     el.preload = "auto"; el.loop = true; el.crossOrigin = "anonymous";
     el.src = `audio/${slot.era.id}.${EXTS[slot.extIdx]}`;
-    el.addEventListener("canplaythrough", () => { slot.ready = true; }, { once: true });
-    el.addEventListener("error", () => { slot.extIdx++; this._tryLoad(i); }, { once: true });
+    // A song often finishes loading AFTER we've already landed on its era; when
+    // it becomes playable, swap it in for the synth right away.
+    const onReady = () => {
+      if (slot.ready) return;
+      slot.ready = true;
+      if (this.enabled && this.current === i && this.mode !== "song") this.setEra(i, true);
+    };
+    el.addEventListener("canplay", onReady);
+    el.addEventListener("loadeddata", onReady);
+    el.addEventListener("canplaythrough", onReady);
+    el.addEventListener("error", () => { if (!slot.ready) { slot.extIdx++; this._tryLoad(i); } }, { once: true });
     slot.el = el;
   }
 
@@ -185,7 +195,7 @@ export class AudioEngine {
       this._dive(fast ? 0.5 : 1.1);             // underwater low-pass dip
 
       const slot = this.songs[i];
-      const hasSong = slot && slot.ready;
+      const hasSong = slot && (slot.ready || (slot.el && slot.el.readyState >= 2));
 
       if (hasSong) {
         this.mode = "song";
@@ -217,6 +227,8 @@ export class AudioEngine {
           if (ps.el) { try { setTimeout(() => { if (this.current !== prev) ps.el.pause(); }, (xfade + 0.2) * 1000); } catch (e) {} }
         }
       }
+
+      if (this.onStatus) { try { this.onStatus(hasSong ? "song" : "synth"); } catch (e) {} }
     } catch (e) {}
   }
 
