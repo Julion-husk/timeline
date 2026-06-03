@@ -88,7 +88,7 @@ the assets serve as-is.
 ### Controls
 - **Scroll** (or swipe) to flow down the river.
 - **Era dots** on the right — click to glide to any era.
-- **🔊 Sound** — two layers through one mixer: **real songs** you add per era (see below), and, for any era with no song file, a **synthesized band** (kick / snare / hats / bass / pad) playing a groove tuned to that genre. Every era change goes **"underwater"** — a low-pass dip, a watery whoosh, and a crossfade — and jumping across several eras at once plays a quick **flyby montage** of each one.
+- **🔊 Sound** — two layers through one mixer: **real songs** you add per era (see below), and, for any era with no song file, a **synthesized band** (kick / snare / hats / bass / pad) playing a groove tuned to that genre. Between songs the audio goes **"underwater"** — a brief **low-pass filter dip** and crossfade — and jumping across several eras at once plays a quick **flyby montage** of each one.
 - **About & sources** — the full bibliography, grouped by era.
 - Respects `prefers-reduced-motion`, and falls back to a clean readable document if WebGL is unavailable.
 

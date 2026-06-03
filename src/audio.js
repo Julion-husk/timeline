@@ -8,8 +8,8 @@
  *   2. SYNTH  — a fully-synthesized band (kick/snare/hats/bass/pad), with a
  *               per-genre groove, used for any era that has no song file.
  *
- * Transitions "go underwater": every era change dips a shared low-pass filter,
- * throws a watery whoosh, and crossfades. Rapid era changes (a multi-era jump)
+ * Transitions "go underwater": every era change briefly dips a shared low-pass
+ * filter (a muffle) and crossfades. Rapid era changes (a multi-era jump)
  * automatically shorten into a montage of stabs as you fly by.
  *
  * Everything is gated behind a user gesture and wrapped in try/catch — if Web
@@ -93,24 +93,18 @@ export class AudioEngine {
       this.master = ctx.createGain(); this.master.gain.value = 0;
       this.master.connect(ctx.destination);
 
+      // the "underwater" low-pass: open normally, dipped briefly between songs
       this.underwater = ctx.createBiquadFilter();
       this.underwater.type = "lowpass";
-      this.underwater.frequency.value = 18000;
+      this.underwater.frequency.value = 20000;
       this.underwater.Q.value = 0.7;
       this.underwater.connect(this.master);
 
       this.musicBus = ctx.createGain(); this.musicBus.gain.value = 1;
       this.musicBus.connect(this.underwater);
 
-      // a short synthetic reverb for the watery "space"
-      this.reverb = ctx.createConvolver();
-      this.reverb.buffer = this._impulse(1.6, 2.2);
-      this.reverbGain = ctx.createGain(); this.reverbGain.gain.value = 0.18;
-      this.reverb.connect(this.reverbGain); this.reverbGain.connect(this.master);
-
       this.synthGain = ctx.createGain(); this.synthGain.gain.value = 0;
       this.synthGain.connect(this.musicBus);
-      this.synthGain.connect(this.reverb);
 
       this.ready = true;
       this._loadSongs();
@@ -118,21 +112,11 @@ export class AudioEngine {
     } catch (e) { this.ready = false; return false; }
   }
 
-  _impulse(seconds, decay) {
-    const rate = this.ctx.sampleRate, len = Math.max(1, (rate * seconds) | 0);
-    const buf = this.ctx.createBuffer(2, len, rate);
-    for (let ch = 0; ch < 2; ch++) {
-      const d = buf.getChannelData(ch);
-      for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
-    }
-    return buf;
-  }
-
   /* ---------------- songs ---------------- */
   _loadSongs() {
     ERAS.forEach((era, i) => {
       const gain = this.ctx.createGain(); gain.gain.value = 0;
-      gain.connect(this.musicBus); gain.connect(this.reverb);
+      gain.connect(this.musicBus);
       const slot = { el: null, ready: false, gain, node: null, extIdx: 0, era };
       this.songs[i] = slot;
       this._tryLoad(i);
@@ -198,7 +182,7 @@ export class AudioEngine {
     const xfade = fast ? 0.16 : 1.1;
 
     try {
-      this._dive(fast ? 0.5 : 1.1);             // underwater dip + whoosh
+      this._dive(fast ? 0.5 : 1.1);             // underwater low-pass dip
 
       const slot = this.songs[i];
       const hasSong = slot && slot.ready;
@@ -237,40 +221,16 @@ export class AudioEngine {
   }
 
   /* ---------------- transitions ---------------- */
+  // The "underwater" transition between songs: dip the low-pass filter down,
+  // then let it open back up. That muffle is the whole effect — nothing else.
   _dive(amount) {
     try {
       const now = this.ctx.currentTime, f = this.underwater.frequency;
-      const low = 260, hi = 18000, depth = 0.45 * amount;
+      const low = 240, hi = 20000, depth = 0.5 * amount;
       f.cancelScheduledValues(now);
       f.setValueAtTime(Math.max(low, f.value), now);
-      f.exponentialRampToValueAtTime(low, now + depth * 0.5);
-      f.exponentialRampToValueAtTime(hi, now + depth + 0.6);
-      this.reverbGain.gain.cancelScheduledValues(now);
-      this.reverbGain.gain.setValueAtTime(0.18, now);
-      this.reverbGain.gain.linearRampToValueAtTime(0.5, now + depth * 0.5);
-      this.reverbGain.gain.linearRampToValueAtTime(0.18, now + depth + 0.8);
-      this._whoosh(amount);
-    } catch (e) {}
-  }
-
-  _whoosh(amount) {
-    try {
-      const ctx = this.ctx, now = ctx.currentTime, dur = 0.7 * amount + 0.3;
-      const src = ctx.createBufferSource();
-      const len = (ctx.sampleRate * dur) | 0, buf = ctx.createBuffer(1, len, ctx.sampleRate);
-      const d = buf.getChannelData(0);
-      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
-      src.buffer = buf;
-      const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.Q.value = 0.8;
-      bp.frequency.setValueAtTime(180, now);
-      bp.frequency.exponentialRampToValueAtTime(1400, now + dur * 0.6);
-      bp.frequency.exponentialRampToValueAtTime(120, now + dur);
-      const g = ctx.createGain();
-      g.gain.setValueAtTime(0.0001, now);
-      g.gain.exponentialRampToValueAtTime(0.16 * amount, now + dur * 0.35);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + dur);
-      src.connect(bp); bp.connect(g); g.connect(this.reverb); g.connect(this.master);
-      src.start(now); src.stop(now + dur + 0.05);
+      f.exponentialRampToValueAtTime(low, now + depth * 0.45);
+      f.exponentialRampToValueAtTime(hi, now + depth + 0.7);
     } catch (e) {}
   }
 
@@ -363,7 +323,7 @@ export class AudioEngine {
     g.gain.setValueAtTime(0.0001, t);
     g.gain.linearRampToValueAtTime(0.14, t + dur * 0.25);
     g.gain.linearRampToValueAtTime(0.0001, t + dur);
-    lp.connect(g); g.connect(this.synthGain); g.connect(this.reverb);
+    lp.connect(g); g.connect(this.synthGain);
     freqs.forEach((f, k) => {
       const o = this.ctx.createOscillator();
       o.type = "sawtooth"; o.frequency.value = f; o.detune.value = (k - freqs.length / 2) * 4;
