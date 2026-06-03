@@ -1,0 +1,1626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>The River of Sound — How Black Music Reflects Its Time</title>
+<meta name="description" content="An interactive 3D timeline of Black music history, from West African drums to Black Lives Matter — built from the standpoint of a Black Studies Honors student in Seattle Public Schools." />
+<meta name="theme-color" content="#0a0a0a" />
+
+<!-- Favicon: a tiny waveform -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0a'/%3E%3Cpath d='M3 16 Q7 4 11 16 T19 16 T27 16' fill='none' stroke='%23ffd23f' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+<!-- Type: graceful system fallbacks if the network is unavailable -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   THE RIVER OF SOUND — styles
+   ============================================================ */
+
+:root{
+  --accent:  #ff9d3c;
+  --accent2: #ffd28a;
+  --ink:     #f3eee6;
+  --ink-dim: #b8b1a6;
+  --glass:   rgba(14,13,17,.52);
+  --glass-strong: rgba(10,10,12,.82);
+  --hair:    rgba(255,255,255,.12);
+
+  /* lens colours (the four Ethnic Studies themes) */
+  --lens-identity:   #ffb347;
+  --lens-power:      #ff5d5d;
+  --lens-resistance: #5b9bff;
+  --lens-reflection: #c08cff;
+
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+*{ box-sizing:border-box; }
+html{ scroll-behavior:auto; }
+body{
+  margin:0;
+  background:#08070a;
+  color:var(--ink);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{ color:inherit; }
+
+/* ---- the canvas sits fixed behind everything ---- */
+#scene{
+  position:fixed; inset:0;
+  width:100vw; height:100vh;
+  display:block; z-index:0;
+}
+/* cinematic vignette for legibility (single overlay, above canvas / below UI) */
+body::after{
+  content:""; position:fixed; inset:0; z-index:1; pointer-events:none;
+  background:
+    radial-gradient(120% 90% at 70% 30%, transparent 40%, rgba(0,0,0,.5) 100%),
+    linear-gradient(to right, rgba(0,0,0,.5), transparent 44%, transparent 80%, rgba(0,0,0,.32));
+}
+body.no-webgl::after{ display:none; }
+#scroll-space{ position:relative; z-index:0; width:1px; pointer-events:none; }
+
+/* ============================================================
+   OVERLAY
+   ============================================================ */
+#overlay{
+  position:fixed; inset:0; z-index:5;
+  pointer-events:none;
+}
+#overlay button, #overlay a, #overlay nav{ pointer-events:auto; }
+
+/* ---- top bar ---- */
+#topbar{
+  position:fixed; top:0; left:0; right:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px clamp(16px,3vw,34px);
+  z-index:6;
+}
+.brand{ display:flex; align-items:center; gap:11px; letter-spacing:.02em; }
+.brand-mark{
+  width:22px; height:22px; border-radius:6px; flex:none;
+  background:
+    radial-gradient(circle at 50% 50%, var(--accent), transparent 70%),
+    #0c0b10;
+  box-shadow:0 0 18px var(--accent);
+  position:relative;
+}
+.brand-mark::after{
+  content:""; position:absolute; inset:3px;
+  background:
+    linear-gradient(90deg,transparent,var(--accent2),transparent);
+  clip-path: polygon(0 50%,8% 30%,16% 60%,24% 20%,32% 70%,40% 35%,50% 80%,60% 25%,68% 65%,76% 38%,84% 60%,92% 45%,100% 50%,100% 52%,0 52%);
+  opacity:.95;
+}
+.brand-text{ font-family:var(--serif); font-weight:600; font-size:17px; }
+
+.top-actions{ display:flex; gap:10px; }
+.top-actions button{
+  font-family:var(--sans); font-size:12.5px; font-weight:500; letter-spacing:.02em;
+  color:var(--ink-dim);
+  background:var(--glass); border:1px solid var(--hair); border-radius:999px;
+  padding:8px 14px; cursor:pointer; backdrop-filter:blur(10px);
+  transition:color .25s, border-color .25s, background .25s;
+  display:flex; align-items:center; gap:8px;
+}
+.top-actions button:hover{ color:var(--ink); border-color:var(--accent); }
+#sound-toggle.on{ color:var(--ink); border-color:var(--accent); }
+
+/* tiny equalizer icon */
+.s-ico{ display:inline-flex; align-items:flex-end; gap:2px; height:13px; }
+.s-ico::before,.s-ico::after,
+#sound-toggle .s-ico i{ content:""; width:2.5px; background:currentColor; border-radius:2px; height:5px; }
+.s-ico::before{ height:9px; }
+.s-ico::after{ height:6px; }
+#sound-toggle.on .s-ico::before{ animation:eq .9s ease-in-out infinite; }
+#sound-toggle.on .s-ico::after{ animation:eq .9s ease-in-out infinite .3s; }
+@keyframes eq{ 0%,100%{height:4px} 50%{height:12px} }
+
+/* ---- progress bar ---- */
+#progress{
+  position:fixed; top:0; left:0; right:0; height:3px; z-index:7;
+  background:rgba(255,255,255,.06);
+}
+#progress-fill{
+  height:100%; width:100%; transform-origin:left center; transform:scaleX(0);
+  background:linear-gradient(90deg, var(--accent), var(--accent2));
+  box-shadow:0 0 12px var(--accent);
+}
+
+/* ============================================================
+   THE READING PANEL
+   ============================================================ */
+#panel{
+  position:fixed;
+  left:clamp(16px,3vw,40px);
+  bottom:clamp(16px,5vh,52px);
+  width:min(440px,42vw);
+  max-height:74vh; overflow:auto;
+  padding:26px 26px 24px;
+  background:var(--glass); backdrop-filter:blur(16px) saturate(1.1);
+  border:1px solid var(--hair);
+  border-left:2px solid var(--accent);
+  border-radius:16px;
+  box-shadow:0 18px 60px rgba(0,0,0,.5), 0 0 60px -30px var(--accent);
+  pointer-events:auto;
+  transition:opacity .22s ease, transform .22s ease;
+  scrollbar-width:thin; scrollbar-color:var(--accent) transparent;
+}
+#panel.fading{ opacity:0; transform:translateY(12px); }
+#panel::-webkit-scrollbar{ width:6px; }
+#panel::-webkit-scrollbar-thumb{ background:var(--accent); border-radius:6px; }
+
+.p-top{ display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+.lens{
+  font-size:10.5px; font-weight:600; letter-spacing:.13em; text-transform:uppercase;
+  padding:4px 10px; border-radius:999px; color:#0a0a0a; white-space:nowrap;
+}
+.lens-identity{   background:var(--lens-identity); }
+.lens-power{      background:var(--lens-power); }
+.lens-resistance{ background:var(--lens-resistance); }
+.lens-reflection{ background:var(--lens-reflection); }
+.years{ font-size:12.5px; letter-spacing:.08em; color:var(--ink-dim); font-variant-numeric:tabular-nums; }
+
+.p-title{
+  font-family:var(--serif); font-weight:800; font-size:clamp(28px,3.4vw,40px);
+  line-height:1.02; margin:.1em 0 .15em; letter-spacing:-.01em;
+}
+.p-genre{
+  font-family:var(--serif); font-style:italic; font-weight:500;
+  color:var(--accent2); font-size:15px; margin:0 0 14px;
+}
+.p-hook{
+  font-size:14px; color:var(--ink); opacity:.92; margin:0 0 14px;
+  padding-left:13px; border-left:2px solid var(--accent);
+  font-style:italic;
+}
+.p-body{ font-size:14.5px; line-height:1.62; color:#e7e2d8; margin:0 0 16px; }
+.p-body em{ color:var(--accent2); font-style:italic; }
+
+.p-voices{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:6px; }
+.p-voices span{
+  font-size:11.5px; color:var(--ink-dim);
+  border:1px solid var(--hair); border-radius:999px; padding:3px 9px;
+}
+
+.seattle{
+  margin:14px 0 6px; padding:12px 14px;
+  background:linear-gradient(180deg, rgba(46,160,110,.14), rgba(46,160,110,.05));
+  border:1px solid rgba(64,200,140,.32); border-radius:11px;
+  font-size:13px; line-height:1.55; color:#e8f3ec;
+}
+.seattle .pin{
+  display:inline-block; font-weight:600; color:#5fe0a8; margin-right:6px;
+  font-size:11px; letter-spacing:.04em;
+}
+
+.p-label{
+  font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ink-dim); margin:16px 0 8px;
+}
+.p-songs{ display:flex; flex-wrap:wrap; gap:7px; }
+.chip{
+  display:inline-flex; align-items:center; gap:7px;
+  font-size:12.5px; text-decoration:none; color:var(--ink);
+  background:rgba(255,255,255,.05); border:1px solid var(--hair);
+  border-radius:999px; padding:6px 12px;
+  transition:border-color .2s, background .2s, transform .2s;
+}
+.chip em{ color:var(--ink-dim); font-style:normal; }
+.chip .play{ color:var(--accent); font-size:10px; }
+.chip:hover{ border-color:var(--accent); background:rgba(255,255,255,.09); transform:translateY(-1px); }
+
+.p-sources{ display:flex; flex-direction:column; gap:5px; }
+.p-sources a{
+  font-size:12px; color:var(--ink-dim); text-decoration:none; line-height:1.4;
+  transition:color .2s;
+}
+.p-sources a:hover{ color:var(--accent); }
+
+/* ============================================================
+   ERA DOTS
+   ============================================================ */
+#dots{
+  position:fixed; right:clamp(12px,1.6vw,26px); top:50%; transform:translateY(-50%);
+  display:flex; flex-direction:column; gap:13px; z-index:6;
+}
+.dot{
+  position:relative; width:11px; height:11px; padding:0; cursor:pointer;
+  border-radius:50%; border:1.5px solid rgba(255,255,255,.32);
+  background:transparent; transition:all .3s;
+}
+.dot:hover{ border-color:var(--accent); }
+.dot.active{
+  background:var(--accent); border-color:var(--accent);
+  box-shadow:0 0 14px var(--accent); transform:scale(1.18);
+}
+.dot-label{
+  position:absolute; right:24px; top:50%; transform:translateY(-50%) translateX(8px);
+  white-space:nowrap; opacity:0; pointer-events:none;
+  background:var(--glass-strong); backdrop-filter:blur(8px);
+  border:1px solid var(--hair); border-radius:8px;
+  padding:6px 11px; font-size:12px; line-height:1.2;
+  transition:opacity .25s, transform .25s;
+}
+.dot-label small{ display:block; color:var(--ink-dim); font-size:10px; margin-top:2px; }
+.dot:hover .dot-label{ opacity:1; transform:translateY(-50%) translateX(0); }
+
+/* ============================================================
+   INTRO / TITLE CARD
+   ============================================================ */
+#intro{
+  position:fixed; inset:0; z-index:20;
+  display:grid; place-items:center; text-align:center;
+  background:
+    radial-gradient(80% 60% at 50% 42%, rgba(10,10,14,.35), rgba(6,6,9,.92));
+  backdrop-filter:blur(2px);
+  transition:opacity 1s ease, visibility 1s;
+}
+#intro.gone{ opacity:0; visibility:hidden; }
+.intro-inner{ max-width:760px; padding:30px; }
+.kicker{
+  font-size:12px; letter-spacing:.32em; text-transform:uppercase;
+  color:var(--accent2); margin:0 0 22px;
+}
+#intro h1{
+  font-family:var(--serif); font-weight:800;
+  font-size:clamp(52px,11vw,138px); line-height:.92; margin:0;
+  letter-spacing:-.02em;
+  background:linear-gradient(180deg,#fff,#cdbf9e);
+  -webkit-background-clip:text; background-clip:text; color:transparent;
+  text-shadow:0 0 80px rgba(255,210,138,.18);
+}
+#intro h1 span{
+  display:block; font-size:.34em; font-style:italic; font-weight:500;
+  letter-spacing:.04em; color:var(--accent2);
+  -webkit-text-fill-color:var(--accent2); margin:.06em 0;
+}
+.question{
+  font-size:clamp(15px,2vw,19px); color:var(--ink); opacity:.92;
+  margin:26px auto 24px; max-width:30em; line-height:1.5;
+}
+#epigraph{
+  margin:0 auto 30px; max-width:34em;
+  font-family:var(--serif); font-style:italic; font-size:15px; line-height:1.7;
+  color:var(--ink-dim);
+}
+#epigraph span{ display:block; }
+#epigraph cite{ display:block; margin-top:10px; font-size:12px; font-style:normal; letter-spacing:.04em; opacity:.8; }
+
+#begin{
+  font-family:var(--sans); font-size:15px; font-weight:600; letter-spacing:.02em;
+  color:#0a0a0a; cursor:pointer;
+  background:linear-gradient(180deg,var(--accent2),var(--accent));
+  border:none; border-radius:999px; padding:14px 30px;
+  box-shadow:0 12px 40px -10px var(--accent), 0 0 0 1px rgba(255,255,255,.18) inset;
+  transition:transform .25s, box-shadow .25s;
+}
+#begin span{ margin-left:8px; display:inline-block; transition:transform .3s; }
+#begin:hover{ transform:translateY(-2px); }
+#begin:hover span{ transform:translateY(3px); }
+.scroll-hint{ margin-top:18px; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--ink-dim); }
+
+/* ============================================================
+   ABOUT / SOURCES MODAL
+   ============================================================ */
+#about{
+  position:fixed; inset:0; z-index:30; display:none;
+  background:rgba(4,4,7,.74); backdrop-filter:blur(6px);
+  padding:5vh 4vw; overflow:auto;
+}
+#about.open{ display:grid; place-items:start center; }
+.about-card{
+  position:relative; max-width:860px; width:100%;
+  background:var(--glass-strong); border:1px solid var(--hair);
+  border-radius:18px; padding:34px clamp(20px,4vw,46px);
+  box-shadow:0 30px 90px rgba(0,0,0,.6);
+}
+#about-close{
+  position:absolute; top:16px; right:18px; width:36px; height:36px;
+  font-size:22px; line-height:1; color:var(--ink-dim);
+  background:transparent; border:1px solid var(--hair); border-radius:50%;
+  cursor:pointer; transition:color .2s, border-color .2s;
+}
+#about-close:hover{ color:var(--ink); border-color:var(--accent); }
+.about-card h2{ font-family:var(--serif); font-size:28px; margin:0 0 18px; }
+.about-card h3{ font-family:var(--serif); font-size:20px; margin:28px 0 14px; }
+#about-body{ font-size:14.5px; line-height:1.65; color:#e7e2d8; }
+.about-lead em{ color:var(--accent2); font-style:italic; }
+.about-epi{
+  font-family:var(--serif); font-style:italic; color:var(--ink-dim);
+  border-left:2px solid var(--accent); padding-left:16px; margin:20px 0;
+}
+.about-epi span{ font-style:normal; font-size:12px; }
+.about-method{ color:var(--ink-dim); font-size:13.5px; }
+.src-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:18px 26px; }
+.src-era h4{ font-family:var(--sans); font-size:13px; margin:0 0 7px; color:var(--ink); }
+.src-era ul{ margin:0; padding-left:0; list-style:none; }
+.src-era li{ margin:0 0 5px; }
+.src-era a{ font-size:12.5px; color:var(--ink-dim); text-decoration:none; }
+.src-era a:hover{ color:var(--accent); }
+
+/* ============================================================
+   FALLBACK DOCUMENT (no WebGL)
+   ============================================================ */
+body.no-webgl{ overflow:auto; }
+body.no-webgl #scene, body.no-webgl #overlay, body.no-webgl #intro, body.no-webgl #scroll-space{ display:none; }
+#fallback{
+  position:relative; z-index:50; max-width:760px; margin:0 auto; padding:6vh 6vw 12vh;
+  background:linear-gradient(180deg,#0c0b10,#08070a);
+}
+.fb-hero{ text-align:center; padding-bottom:6vh; border-bottom:1px solid var(--hair); }
+.fb-kicker{ font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--accent2); }
+.fb-hero h1{ font-family:var(--serif); font-size:clamp(44px,9vw,90px); margin:.1em 0; }
+.fb-sub{ font-size:18px; color:var(--ink-dim); max-width:28em; margin:0 auto; }
+.fb-hero blockquote{ font-family:var(--serif); font-style:italic; color:var(--ink-dim); margin:26px auto; max-width:30em; }
+.fb-note{ font-size:12px; color:var(--ink-dim); opacity:.7; }
+.fb-era{ padding:5vh 0; border-bottom:1px solid var(--hair); }
+.fb-num{ font-family:var(--serif); font-size:54px; color:var(--a); opacity:.5; line-height:1; }
+.fb-meta{ display:flex; gap:10px; align-items:center; margin:6px 0 8px; }
+.fb-era h2{ font-family:var(--serif); font-size:34px; margin:.1em 0; color:var(--a); }
+.fb-genre{ font-style:italic; color:var(--b); margin:0 0 14px; }
+.fb-body{ font-size:16px; line-height:1.7; }
+.fb-body em{ color:var(--b); }
+.fb-seattle{ background:rgba(46,160,110,.1); border:1px solid rgba(64,200,140,.3); border-radius:10px; padding:12px 16px; font-size:14.5px; }
+.fb-voices,.fb-listen,.fb-src{ font-size:13.5px; color:var(--ink-dim); line-height:1.6; }
+.fb-era a{ color:var(--a); text-decoration:none; }
+.fb-era a:hover{ text-decoration:underline; }
+.fb-foot{ text-align:center; padding-top:5vh; font-size:13px; color:var(--ink-dim); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width:760px){
+  #panel{
+    left:10px; right:10px; bottom:10px; width:auto;
+    max-height:46vh; padding:18px 18px 16px; border-radius:14px;
+  }
+  .p-body{ font-size:13.5px; }
+  #dots{ right:9px; gap:9px; }
+  .dot{ width:9px; height:9px; }
+  .dot .dot-label{ display:none; }
+  .brand-text{ display:none; }
+  #topbar{ padding:12px 14px; }
+  .top-actions button{ padding:7px 11px; font-size:11.5px; }
+  #intro h1{ font-size:clamp(46px,17vw,90px); }
+}
+@media (max-width:420px){
+  .top-actions #about-toggle{ display:none; }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce){
+  #panel, #intro, .chip, #begin span, .dot{ transition-duration:.001s !important; }
+  #sound-toggle.on .s-ico::before, #sound-toggle.on .s-ico::after{ animation:none; }
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- The 3D river -->
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <!-- Tall invisible element that provides the scroll distance -->
+  <div id="scroll-space"></div>
+
+  <!-- Fixed UI overlay -->
+  <div id="overlay">
+
+    <header id="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">The River of Sound</span>
+      </div>
+      <div class="top-actions">
+        <button id="sound-toggle" aria-pressed="false" title="Toggle the synthesized ambient bed">
+          <span class="s-ico" aria-hidden="true"></span><span class="s-label">Sound off</span>
+        </button>
+        <button id="about-toggle" title="About &amp; sources">About &amp; sources</button>
+      </div>
+    </header>
+
+    <div id="progress"><div id="progress-fill"></div></div>
+
+    <!-- The active-era reading panel -->
+    <article id="panel" aria-live="polite"></article>
+
+    <!-- Right-side era navigation -->
+    <nav id="dots" aria-label="Jump to era"></nav>
+
+  </div>
+
+  <!-- Intro / title card -->
+  <section id="intro">
+    <div class="intro-inner">
+      <p class="kicker">Black Studies Honors · Seattle Public Schools</p>
+      <h1>The River<span>of</span>Sound</h1>
+      <p class="question">How has Black music evolved throughout history —<br>and how does it
+        reflect the issues of its time?</p>
+      <blockquote id="epigraph"></blockquote>
+      <button id="begin">Enter the river <span aria-hidden="true">↓</span></button>
+      <p class="scroll-hint">scroll to begin · jump between eras using the dots once inside</p>
+    </div>
+  </section>
+
+  <!-- About / sources modal -->
+  <div id="about">
+    <div class="about-card">
+      <button id="about-close" aria-label="Close">×</button>
+      <h2>About &amp; sources</h2>
+      <div id="about-body"></div>
+    </div>
+  </div>
+
+  <script>
+/* ===== data ===== */
+/*
+ * THE RIVER OF SOUND — content & data model
+ * ------------------------------------------------------------
+ * An interactive timeline: "How has Black music evolved throughout history,
+ * and how does it reflect the issues of its time?"
+ *
+ * Standpoint: an 11th-grade Black Studies Honors student, Seattle Public Schools.
+ *
+ * Each era is read through one of the four lenses of the SPS / WA State
+ * Ethnic Studies framework — Origins & Identity, Power & Oppression,
+ * Resistance & Liberation, and Reflection & Action — so the project speaks
+ * the same language as the course it was made for.
+ *
+ * Every claim below is anchored to a credible source listed in `sources`
+ * (Smithsonian / NMAAHC, the Library of Congress, HistoryLink.org for the
+ * Seattle threads, Britannica, PBS, NPR, History.com). Song links open a
+ * YouTube search so the listener can hear the music for themselves.
+ */
+
+const EPIGRAPH = {
+  lines: [
+    "I’ve known rivers ancient as the world and older",
+    "than the flow of human blood in human veins.",
+    "My soul has grown deep like the rivers.",
+  ],
+  attribution: "Langston Hughes, “The Negro Speaks of Rivers,” 1921",
+};
+
+// The four Ethnic Studies lenses (color-coded in the UI).
+const LENSES = {
+  identity:   { label: "Origins & Identity",       short: "Identity" },
+  power:      { label: "Power & Oppression",        short: "Power" },
+  resistance: { label: "Resistance & Liberation",   short: "Resistance" },
+  reflection: { label: "Reflection & Action",       short: "Reflection" },
+};
+
+const ERAS = [
+  /* 1 ───────────────────────────────────────────────────────── */
+  {
+    id: "roots",
+    years: "Before 1619",
+    title: "Before the Word, the Drum",
+    genre: "West & Central African roots",
+    lens: "identity",
+    hook: "“The drum talks; the people answer.”",
+    body:
+      "Every genre downstream of this point begins in West and Central Africa, where music was never " +
+      "merely entertainment — it was memory, law, worship, and news. The griot carried a community’s " +
+      "entire history in song; the talking drum imitated speech; and everyone answered the leader’s line " +
+      "in <em>call-and-response</em>. When millions were stolen through the Middle Passage, captors could " +
+      "take their freedom but not these tools. Polyrhythm, the bent “blue note,” improvisation, and " +
+      "call-and-response survived in the body — the hidden source code of everything that follows.",
+    voices: ["Griots", "Talking drums", "Polyrhythm", "Call-and-response"],
+    songs: [{ t: "West African drum & griot tradition", a: "" }],
+    seattle: null,
+    sources: [
+      { label: "Smithsonian NMAAHC — Musical Crossroads", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
+      { label: "Smithsonian Music — Musical Crossroads", url: "https://music.si.edu/story/musical-crossroads" },
+    ],
+    colors: { bg: "#160d07", accent: "#ff9d3c", accent2: "#ffd28a" },
+    wave: { amp: 0.80, freq: 1.1, sharp: 0.06, jitter: 0.10, swell: 0.85, speed: 0.45 },
+  },
+
+  /* 2 ───────────────────────────────────────────────────────── */
+  {
+    id: "spirituals",
+    years: "1619 – 1865",
+    title: "Steal Away",
+    genre: "Spirituals · field hollers · work songs",
+    lens: "resistance",
+    hook: "“Wade in the water, children…”",
+    body:
+      "Enslaved people were forbidden to read, write, or gather freely — so they testified in song. " +
+      "Spirituals and field hollers turned Christian imagery into a double language: “Heaven” could mean " +
+      "the North, the “Jordan” the Ohio River, and <em>Wade in the Water</em> a warning to throw the " +
+      "bloodhounds off the scent. Harriet Tubman is said to have used spirituals as signals on the " +
+      "Underground Railroad. Historians debate how literally any song worked as a map — but whether map " +
+      "or metaphor, the music did real work: it organized hope, preserved dignity, and made a way to " +
+      "endure, and sometimes escape, the unendurable.",
+    voices: ["The ring shout", "Harriet Tubman", "Fisk Jubilee Singers"],
+    songs: [
+      { t: "Wade in the Water", a: "Negro spiritual" },
+      { t: "Swing Low, Sweet Chariot", a: "Negro spiritual" },
+      { t: "Steal Away", a: "Negro spiritual" },
+    ],
+    seattle: null,
+    sources: [
+      { label: "NMAAHC — Musical Crossroads (Roots & Agency)", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
+      { label: "“Wade in the Water” — Wikipedia", url: "https://en.wikipedia.org/wiki/Wade_in_the_Water" },
+      { label: "WHYY — Decoding Underground Railroad songs", url: "https://whyy.org/articles/underground-railroad-expert-decodes-songs-with-practical-advice-for-fleeing-slaves/" },
+    ],
+    colors: { bg: "#07101f", accent: "#5b8cff", accent2: "#aecbff" },
+    wave: { amp: 0.66, freq: 0.9, sharp: 0.0, jitter: 0.04, swell: 1.45, speed: 0.38 },
+  },
+
+  /* 3 ───────────────────────────────────────────────────────── */
+  {
+    id: "blues",
+    years: "c. 1900 – 1920s",
+    title: "Trouble in Mind",
+    genre: "The Blues",
+    lens: "power",
+    hook: "“I hate to see that evenin’ sun go down.”",
+    body:
+      "Freedom on paper met Jim Crow in fact: sharecropping debt, segregation, and the daily threat of " +
+      "violence. Out of the Mississippi Delta came the blues — three chords, twelve bars, and a brutally " +
+      "honest “I.” The blue notes bent between the cracks of the piano keys the way Black life bent around " +
+      "the cracks of the law. W.C. Handy wrote it down, Bessie Smith — the “Empress of the Blues” — sold " +
+      "millions, and the form became the grammar of nearly all American popular music to come. The blues " +
+      "did not cause the sorrow; it <em>named</em> it, and naming it was a kind of power.",
+    voices: ["W.C. Handy", "Bessie Smith", "Ma Rainey", "Robert Johnson"],
+    songs: [
+      { t: "Downhearted Blues", a: "Bessie Smith" },
+      { t: "Cross Road Blues", a: "Robert Johnson" },
+    ],
+    seattle: null,
+    sources: [
+      { label: "Britannica — Blues (music)", url: "https://www.britannica.com/art/blues-music" },
+      { label: "NMAAHC — Musical Crossroads", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
+    ],
+    colors: { bg: "#140a18", accent: "#9a5bff", accent2: "#cfa8ff" },
+    wave: { amp: 0.90, freq: 1.5, sharp: 0.10, jitter: 0.16, swell: 0.70, speed: 0.55 },
+  },
+
+  /* 4 ───────────────────────────────────────────────────────── */
+  {
+    id: "jazz",
+    years: "1920s – 1930s",
+    title: "Take the A Train",
+    genre: "Jazz & the Harlem Renaissance",
+    lens: "identity",
+    hook: "“The freedom to invent yourself — even in a segregated room.”",
+    body:
+      "The Great Migration carried six million Black Americans north and west, toward jobs and away from " +
+      "terror. In crowded new cities the blues went bright and modern and became jazz — improvised, " +
+      "swinging, brand-new. Harlem’s “New Negro” Renaissance made Black art a declaration of full " +
+      "citizenship; Louis Armstrong’s trumpet and Duke Ellington’s orchestra were sonic proof of genius. " +
+      "The contradiction was loud: at the Cotton Club, Black musicians played for whites-only crowds. By " +
+      "1939 Billie Holiday turned this music toward open protest with <em>Strange Fruit</em>, an " +
+      "anti-lynching ballad now called the first modern protest song.",
+    voices: ["Louis Armstrong", "Duke Ellington", "Bessie Smith", "Billie Holiday"],
+    songs: [
+      { t: "Take the A Train", a: "Duke Ellington" },
+      { t: "West End Blues", a: "Louis Armstrong" },
+      { t: "Strange Fruit", a: "Billie Holiday" },
+    ],
+    seattle:
+      "The same years lit up S. Jackson Street, the spine of Seattle’s Central District. Its clubs were " +
+      "among the only rooms in town where Black, white, and Asian residents met as social equals — the " +
+      "cradle of the city’s first real music scene.",
+    sources: [
+      { label: "HistoryLink — Jackson Street Jazz Scene (Seattle)", url: "https://www.historylink.org/File/22930" },
+      { label: "HistoryLink — Rhythm & Roots: Seattle’s First Sound", url: "https://www.historylink.org/File/3641" },
+      { label: "Britannica — “Strange Fruit”", url: "https://www.britannica.com/topic/Strange-Fruit-song" },
+    ],
+    colors: { bg: "#1a1305", accent: "#ffc24a", accent2: "#ffe6a8" },
+    wave: { amp: 0.80, freq: 3.2, sharp: 0.12, jitter: 0.46, swell: 0.60, speed: 1.00 },
+  },
+
+  /* 5 ───────────────────────────────────────────────────────── */
+  {
+    id: "gospel",
+    years: "1930s – 1940s",
+    title: "Precious Lord, Take My Hand",
+    genre: "Gospel",
+    lens: "identity",
+    hook: "“The safest room in America to be fully, joyfully Black.”",
+    body:
+      "During the Depression, Thomas A. Dorsey fused blues feeling with sacred words to invent gospel — " +
+      "and the Black church became a sanctuary where Black joy and grief could be voiced without apology. " +
+      "Mahalia Jackson’s voice could hold a whole congregation; Sister Rosetta Tharpe plugged in an " +
+      "electric guitar and, with holy distortion, essentially invented the sound of rock and roll a decade " +
+      "early. Gospel built the muscle — the choirs, the cadences, the organizing networks — that would " +
+      "soon power the Civil Rights Movement from the pew to the street.",
+    voices: ["Thomas A. Dorsey", "Mahalia Jackson", "Sister Rosetta Tharpe"],
+    songs: [
+      { t: "Take My Hand, Precious Lord", a: "Mahalia Jackson" },
+      { t: "Strange Things Happening Every Day", a: "Sister Rosetta Tharpe" },
+    ],
+    seattle: null,
+    sources: [
+      { label: "Britannica — Sister Rosetta Tharpe", url: "https://www.britannica.com/biography/Sister-Rosetta-Tharpe" },
+      { label: "PBS American Masters — Sister Rosetta Tharpe", url: "https://www.pbs.org/wnet/americanmasters/sister-rosetta-tharpe-about-film/2463/" },
+    ],
+    colors: { bg: "#1a0820", accent: "#d8b13a", accent2: "#ff9ed1" },
+    wave: { amp: 1.05, freq: 1.3, sharp: 0.05, jitter: 0.08, swell: 1.6, speed: 0.50 },
+  },
+
+  /* 6 ───────────────────────────────────────────────────────── */
+  {
+    id: "rocknroll",
+    years: "late 1940s – 1950s",
+    title: "Tutti Frutti",
+    genre: "Rhythm & Blues → the birth of Rock ’n’ Roll",
+    lens: "power",
+    hook: "“They integrated the teenagers faster than the law integrated the schools.”",
+    body:
+      "After the war, gospel’s fire and the blues’ beat collided into rhythm & blues, then rock ’n’ roll. " +
+      "Chuck Berry’s storytelling and Little Richard’s scream were Black, defiant, and explosively new — " +
+      "Berry called his style “one long Sister Rosetta Tharpe impersonation.” But the color line ran " +
+      "straight through the charts: white artists covered Black songs for bigger sales and softer radio, " +
+      "and a sanitized “King” was crowned while the inventors were pushed to the margins. The music " +
+      "integrated American teenagers years before the law integrated their schools.",
+    voices: ["Chuck Berry", "Little Richard", "Fats Domino", "Big Mama Thornton"],
+    songs: [
+      { t: "Tutti Frutti", a: "Little Richard" },
+      { t: "Johnny B. Goode", a: "Chuck Berry" },
+    ],
+    seattle:
+      "In 1948 a blind 17-year-old named Ray Charles stepped off a bus and cut his first records here; " +
+      "his Maxin Trio gigged on Jackson Street alongside teenage Quincy Jones and Ernestine Anderson. " +
+      "Seattle’s scene helped raise three future legends.",
+    sources: [
+      { label: "HistoryLink — Jackson Street Jazz Scene (Ray Charles, 1948)", url: "https://www.historylink.org/File/22930" },
+      { label: "HistoryLink — Quincy Jones (1933–2024)", url: "https://historylink.org/File/10354" },
+      { label: "Britannica — Sister Rosetta Tharpe", url: "https://www.britannica.com/biography/Sister-Rosetta-Tharpe" },
+    ],
+    colors: { bg: "#1a0707", accent: "#ff5a4d", accent2: "#ffb38f" },
+    wave: { amp: 0.95, freq: 2.4, sharp: 0.35, jitter: 0.12, swell: 0.50, speed: 0.92 },
+  },
+
+  /* 7 ───────────────────────────────────────────────────────── */
+  {
+    id: "soul",
+    years: "1960s",
+    title: "A Change Is Gonna Come",
+    genre: "Soul & Motown",
+    lens: "resistance",
+    hook: "“R-E-S-P-E-C-T.”",
+    body:
+      "As the Civil Rights Movement marched, soul gave it a heartbeat. Motown’s Berry Gordy engineered " +
+      "crossover hits that put Black faces and voices into white American living rooms — integration by " +
+      "airwave. Aretha Franklin spelled the movement’s demand in a single word: R-E-S-P-E-C-T. And in " +
+      "1964, after being turned away from a whites-only motel, Sam Cooke wrote <em>A Change Is Gonna " +
+      "Come</em>, a hymn of weary hope that became the movement’s unofficial anthem. Soul insisted that " +
+      "Black dignity was not up for negotiation.",
+    voices: ["Sam Cooke", "Aretha Franklin", "The Motown sound", "Curtis Mayfield"],
+    songs: [
+      { t: "A Change Is Gonna Come", a: "Sam Cooke" },
+      { t: "Respect", a: "Aretha Franklin" },
+    ],
+    seattle:
+      "Across town, a left-handed kid from the Central District named Jimmy Hendrix was teaching himself " +
+      "guitar — soon to leave Seattle and remake the instrument itself.",
+    sources: [
+      { label: "Library of Congress — “A Change Is Gonna Come” (National Recording Registry)", url: "https://www.loc.gov/static/programs/national-recording-preservation-board/documents/AChangeIsGonnaCome.pdf" },
+      { label: "“A Change Is Gonna Come” — Wikipedia", url: "https://en.wikipedia.org/wiki/A_Change_Is_Gonna_Come" },
+    ],
+    colors: { bg: "#1a0a14", accent: "#ff5e8a", accent2: "#ffb37e" },
+    wave: { amp: 0.85, freq: 1.7, sharp: 0.08, jitter: 0.10, swell: 0.85, speed: 0.60 },
+  },
+
+  /* 8 ───────────────────────────────────────────────────────── */
+  {
+    id: "funk",
+    years: "late 1960s – 1970s",
+    title: "Say It Loud",
+    genre: "Funk & the Black Power era",
+    lens: "identity",
+    hook: "“Say it loud — I’m Black and I’m proud.”",
+    body:
+      "When nonviolence met fire hoses and assassinations, the mood hardened from <em>hope</em> to " +
+      "<em>pride and power</em>. In 1968 James Brown released “Say It Loud — I’m Black and I’m Proud,” and " +
+      "a generation traded the word “Negro” for “Black.” Funk made the downbeat — “the One” — heavy and " +
+      "unapologetic; Sly Stone, Gil Scott-Heron (“The Revolution Will Not Be Televised”), and " +
+      "Parliament-Funkadelic turned liberation into something you could dance to. Marvin Gaye’s " +
+      "<em>What’s Going On</em> (1971) mourned Vietnam, poverty, and a planet in trouble.",
+    voices: ["James Brown", "Sly & the Family Stone", "Gil Scott-Heron", "Marvin Gaye"],
+    songs: [
+      { t: "Say It Loud – I’m Black and I’m Proud", a: "James Brown" },
+      { t: "Star-Spangled Banner (Live at Woodstock)", a: "Jimi Hendrix" },
+      { t: "What’s Going On", a: "Marvin Gaye" },
+    ],
+    seattle:
+      "At Woodstock in 1969, Garfield High’s own Jimi Hendrix tore “The Star-Spangled Banner” into sirens " +
+      "and screams — a Black Seattleite forcing America to hear its own anthem through the chaos of war.",
+    sources: [
+      { label: "“Say It Loud – I’m Black and I’m Proud” — Wikipedia", url: "https://en.wikipedia.org/wiki/Say_It_Loud_%E2%80%93_I%27m_Black_and_I%27m_Proud" },
+      { label: "JimiHendrix.com — Star-Spangled Banner at Woodstock", url: "https://www.jimihendrix.com/editorial/star-spangled-banner-jimi-hendrix-at-woodstock-the-anthem-of-a-generation/" },
+      { label: "HistoryLink — Jimi Hendrix (1942–1970)", url: "https://www.historylink.org/file/2498" },
+    ],
+    colors: { bg: "#0f061a", accent: "#b6ff3a", accent2: "#ff5ee6" },
+    wave: { amp: 1.00, freq: 2.2, sharp: 0.50, jitter: 0.20, swell: 0.50, speed: 0.95 },
+  },
+
+  /* 9 ───────────────────────────────────────────────────────── */
+  {
+    id: "hiphop",
+    years: "1973 – early 1980s",
+    title: "The Message",
+    genre: "The birth of Hip-Hop",
+    lens: "identity",
+    hook: "“It’s like a jungle sometimes…”",
+    body:
+      "The post–Civil-Rights city was broke and burning — factories gone, the Bronx literally on fire, " +
+      "public schools cutting music. On August 11, 1973, at a back-to-school party, DJ Kool Herc looped " +
+      "the drum “break” of a record across two turntables, and dancers and rappers filled the space the " +
+      "city had abandoned. From nothing — no budget, no instruments, just records, a mic, and a lamppost " +
+      "to plug into — came a whole new art form. In 1982, Grandmaster Flash & the Furious Five’s " +
+      "<em>The Message</em> put inner-city reality into rhyme and pushed the MC to the front.",
+    voices: ["DJ Kool Herc", "Afrika Bambaataa", "Grandmaster Flash", "The Sugarhill Gang"],
+    songs: [
+      { t: "The Message", a: "Grandmaster Flash & the Furious Five" },
+      { t: "Rapper’s Delight", a: "The Sugarhill Gang" },
+    ],
+    seattle: null,
+    sources: [
+      { label: "History.com — Hip-hop is born in the Bronx (Aug 11, 1973)", url: "https://www.history.com/this-day-in-history/august-11/hip-hop-is-born-at-a-birthday-party-in-the-bronx" },
+      { label: "Library of Congress — “The Message” (National Recording Registry)", url: "https://www.loc.gov/static/programs/national-recording-preservation-board/documents/TheMessage.pdf" },
+    ],
+    colors: { bg: "#0b0b10", accent: "#46e0ff", accent2: "#ff5ea8" },
+    wave: { amp: 1.10, freq: 2.0, sharp: 0.72, jitter: 0.16, swell: 0.40, speed: 0.82 },
+  },
+
+  /* 10 ──────────────────────────────────────────────────────── */
+  {
+    id: "goldenage",
+    years: "late 1980s – 1990s",
+    title: "Fight the Power",
+    genre: "The Golden Age — rap as resistance",
+    lens: "power",
+    hook: "“Black America’s frontline news, set to a beat.”",
+    body:
+      "Hip-hop grew up angry and articulate. As the War on Drugs and mandatory-minimum sentencing filled " +
+      "prisons with young Black men, rap became Black America’s frontline news. Public Enemy’s <em>Fight " +
+      "the Power</em> (1989) scored Spike Lee’s <em>Do the Right Thing</em>; N.W.A’s “F— tha Police” " +
+      "(1988) testified to everyday police violence so vividly that the FBI mailed the label a warning. " +
+      "When the officers who beat Rodney King were acquitted in 1992, Los Angeles erupted — and the " +
+      "records had already told you why. This is “power and oppression” set to a breakbeat.",
+    voices: ["Public Enemy", "N.W.A", "Tupac Shakur", "Queen Latifah"],
+    songs: [
+      { t: "Fight the Power", a: "Public Enemy" },
+      { t: "Straight Outta Compton", a: "N.W.A" },
+    ],
+    seattle:
+      "Sir Mix-a-Lot’s “Posse on Broadway” (1988) — cruising Seattle’s own streets — and his Nastymix " +
+      "label “put Seattle on the rap map,” proving the culture belonged to the whole country, not just " +
+      "the coasts.",
+    sources: [
+      { label: "“Fight the Power” (Public Enemy) — Wikipedia", url: "https://en.wikipedia.org/wiki/Fight_the_Power_(Public_Enemy_song)" },
+      { label: "“F— tha Police” (N.W.A) — Wikipedia", url: "https://en.wikipedia.org/wiki/Fuck_tha_Police" },
+      { label: "HistoryLink — Nastymix / Sir Mix-A-Lot Gold Record (1989)", url: "https://www.historylink.org/file/9793" },
+    ],
+    colors: { bg: "#120a06", accent: "#ffcf3a", accent2: "#ff5151" },
+    wave: { amp: 1.05, freq: 2.7, sharp: 0.55, jitter: 0.30, swell: 0.45, speed: 1.00 },
+  },
+
+  /* 11 ──────────────────────────────────────────────────────── */
+  {
+    id: "neosoul",
+    years: "late 1990s – 2000s",
+    title: "Doo-Wop (That Thing)",
+    genre: "Neo-Soul & the new millennium",
+    lens: "reflection",
+    hook: "“A generation asking what it had gained and lost.”",
+    body:
+      "Against a backdrop of bling and big-label commercialism, a wave of artists turned back toward the " +
+      "roots. Lauryn Hill’s <em>The Miseducation of Lauryn Hill</em> (1998) wove gospel, soul, reggae, and " +
+      "hip-hop into a meditation on love, faith, and self-respect; Erykah Badu and D’Angelo made " +
+      "“neo-soul” a home for Black introspection. The lens here is <em>reflection</em>: a generation " +
+      "reclaiming live instruments, spirituality, and — above all — the voice of Black women at the " +
+      "center of the story.",
+    voices: ["Lauryn Hill", "Erykah Badu", "D’Angelo", "The Roots"],
+    songs: [
+      { t: "Doo-Wop (That Thing)", a: "Lauryn Hill" },
+      { t: "On & On", a: "Erykah Badu" },
+    ],
+    seattle: null,
+    sources: [
+      { label: "“The Miseducation of Lauryn Hill” — Wikipedia", url: "https://en.wikipedia.org/wiki/The_Miseducation_of_Lauryn_Hill" },
+      { label: "NMAAHC — Musical Crossroads (Agency & Identity)", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
+    ],
+    colors: { bg: "#08140f", accent: "#4fd6b0", accent2: "#ffbf6b" },
+    wave: { amp: 0.80, freq: 1.6, sharp: 0.10, jitter: 0.12, swell: 0.95, speed: 0.55 },
+  },
+
+  /* 12 ──────────────────────────────────────────────────────── */
+  {
+    id: "blm",
+    years: "2013 – present",
+    title: "Alright",
+    genre: "The Black Lives Matter era",
+    lens: "reflection",
+    hook: "“We gon’ be alright.”",
+    body:
+      "After the killings of Trayvon Martin (2012), Michael Brown in Ferguson (2014), and George Floyd " +
+      "(2020), #BlackLivesMatter turned grief into a movement — and music answered, again. Kendrick " +
+      "Lamar’s <em>Alright</em> (2015) became a literal chant in the streets, called this generation’s " +
+      "“We Shall Overcome.” Beyoncé’s <em>Lemonade</em> and “Formation” (2016) centered Black Southern " +
+      "womanhood; Childish Gambino’s “This Is America” (2018) crammed gun violence, minstrelsy, and police " +
+      "terror into four shocking minutes. Four hundred years on, the river runs straight from the spiritual " +
+      "to the streaming single — and the music still names the issue, because naming it is still power.",
+    voices: ["Kendrick Lamar", "Beyoncé", "Childish Gambino", "Solange"],
+    songs: [
+      { t: "Alright", a: "Kendrick Lamar" },
+      { t: "Formation", a: "Beyoncé" },
+      { t: "This Is America", a: "Childish Gambino" },
+    ],
+    seattle:
+      "In 2020, Seattle hosted some of the nation’s largest George Floyd protests and the Capitol Hill " +
+      "protest zone — the river of sound flowing right past the same Central District where it first " +
+      "reached this city a century ago.",
+    sources: [
+      { label: "“Alright” (Kendrick Lamar) — Wikipedia", url: "https://en.wikipedia.org/wiki/Alright_(Kendrick_Lamar_song)" },
+      { label: "NPR — “Alright,” party and protest (American Anthem)", url: "https://www.npr.org/2019/08/26/753511135/kendrick-lamar-alright-american-anthem-party-protest" },
+      { label: "NBC News — Childish Gambino, “This Is America”", url: "https://www.nbcnews.com/news/nbcblk/america-donald-glover-s-shocking-new-video-tackles-race-violence-n872126" },
+    ],
+    colors: { bg: "#0a0a0a", accent: "#ffd23f", accent2: "#ffffff" },
+    wave: { amp: 1.10, freq: 2.5, sharp: 0.45, jitter: 0.25, swell: 0.60, speed: 0.92 },
+  },
+];
+
+// A YouTube search link so any track can be heard without embedding/copyright risk.
+function listenURL(song) {
+  const q = encodeURIComponent(`${song.a} ${song.t}`.trim());
+  return `https://www.youtube.com/results?search_query=${q}`;
+}
+
+/* ===== audio ===== */
+/*
+ * AudioEngine — a tiny, fully-synthesized ambient bed.
+ *
+ * It plays NO copyrighted music. It generates an evolving drone (a chord pad)
+ * plus a soft heartbeat pulse whose harmony and tempo shift to match each era,
+ * so the river you see is also a river you (optionally) hear. Everything is
+ * wrapped in try/catch and gated behind a user gesture; if Web Audio is
+ * unavailable the page is completely unaffected.
+ */
+
+// Per-era musical character: a small chord (semitone offsets from a root),
+// a root pitch, a filter brightness, and a pulse tempo (beats/sec).
+const ROOT = 110; // A2
+const semi = (n) => ROOT * Math.pow(2, n / 12);
+
+const PROFILES = {
+  roots:      { chord: [0, 7, 12, 19],      cutoff: 700,  bpm: 1.4, wave: "sine" },
+  spirituals: { chord: [0, 3, 7, 10],       cutoff: 600,  bpm: 1.1, wave: "sine" },   // minor, prayerful
+  blues:      { chord: [0, 3, 6, 10],       cutoff: 750,  bpm: 1.5, wave: "triangle" },// flat-five blues color
+  jazz:       { chord: [0, 4, 7, 11, 14],   cutoff: 1100, bpm: 2.0, wave: "triangle" },// maj7/9 shimmer
+  gospel:     { chord: [0, 4, 7, 12],       cutoff: 950,  bpm: 1.3, wave: "sine" },    // bright major
+  rocknroll:  { chord: [0, 4, 7, 10],       cutoff: 1200, bpm: 2.2, wave: "sawtooth" },// dominant 7
+  soul:       { chord: [0, 4, 9, 11],       cutoff: 900,  bpm: 1.6, wave: "triangle" },// warm maj
+  funk:       { chord: [0, 3, 7, 10, 14],   cutoff: 1300, bpm: 2.3, wave: "sawtooth" },// min9 groove
+  hiphop:     { chord: [0, 3, 7, 10],       cutoff: 800,  bpm: 1.8, wave: "square" },   // dark min
+  goldenage:  { chord: [0, 3, 7, 8],        cutoff: 1000, bpm: 2.1, wave: "sawtooth" }, // tense b6
+  neosoul:    { chord: [0, 3, 7, 9, 14],    cutoff: 950,  bpm: 1.5, wave: "triangle" }, // min6/9 mellow
+  blm:        { chord: [0, 5, 7, 12],       cutoff: 1100, bpm: 2.0, wave: "triangle" }, // sus4 → unresolved
+};
+
+class AudioEngine {
+  constructor() {
+    this.ctx = null;
+    this.ready = false;
+    this.enabled = false;
+    this.voices = [];
+    this.master = null;
+    this.filter = null;
+    this.pulseGain = null;
+    this._pulseTimer = null;
+    this._currentEra = null;
+  }
+
+  _build() {
+    if (this.ready) return true;
+    try {
+      const Ctx = window.AudioContext || window.webkitAudioContext;
+      if (!Ctx) return false;
+      const ctx = new Ctx();
+      this.ctx = ctx;
+
+      const master = ctx.createGain();
+      master.gain.value = 0.0; // fade in on enable
+      const filter = ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.value = 800;
+      filter.Q.value = 0.6;
+      filter.connect(master);
+      master.connect(ctx.destination);
+
+      // Five reusable drone voices (osc -> per-voice gain -> filter).
+      this.voices = [];
+      for (let i = 0; i < 5; i++) {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.value = ROOT;
+        osc.detune.value = (i - 2) * 4; // gentle chorus
+        g.gain.value = 0.0;
+        osc.connect(g);
+        g.connect(filter);
+        osc.start();
+        this.voices.push({ osc, g });
+      }
+
+      this.master = master;
+      this.filter = filter;
+      this.ready = true;
+      return true;
+    } catch (e) {
+      this.ready = false;
+      return false;
+    }
+  }
+
+  isEnabled() { return this.enabled; }
+
+  async enable() {
+    if (!this._build()) return false;
+    try {
+      if (this.ctx.state === "suspended") await this.ctx.resume();
+      this.enabled = true;
+      const now = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(now);
+      this.master.gain.setTargetAtTime(0.16, now, 1.2);
+      if (this._currentEra) this.setEra(this._currentEra, true);
+      this._scheduleNextPulse();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  disable() {
+    if (!this.ready) { this.enabled = false; return; }
+    try {
+      this.enabled = false;
+      const now = this.ctx.currentTime;
+      this.master.gain.cancelScheduledValues(now);
+      this.master.gain.setTargetAtTime(0.0, now, 0.4);
+      if (this._pulseTimer) { clearTimeout(this._pulseTimer); this._pulseTimer = null; }
+    } catch (e) { /* ignore */ }
+  }
+
+  async toggle() {
+    if (this.enabled) { this.disable(); return false; }
+    return await this.enable();
+  }
+
+  // Smoothly move the pad to a new era's harmony / brightness / tempo.
+  setEra(era, force = false) {
+    this._currentEra = era;
+    if (!this.ready || !this.enabled) return;
+    const p = PROFILES[era.id] || PROFILES.roots;
+    try {
+      const now = this.ctx.currentTime;
+      const chord = p.chord;
+      this.voices.forEach((v, i) => {
+        const interval = chord[i % chord.length] + (i >= chord.length ? 12 : 0);
+        const freq = semi(interval - 12); // drop an octave for warmth
+        v.osc.type = p.wave;
+        v.osc.frequency.setTargetAtTime(freq, now, 0.6);
+        const active = i < chord.length ? 0.18 : 0.0;
+        v.g.gain.setTargetAtTime(active, now, 0.8);
+      });
+      this.filter.frequency.setTargetAtTime(p.cutoff, now, 1.0);
+      this._bpm = p.bpm;
+    } catch (e) { /* ignore */ }
+  }
+
+  // A soft "heartbeat" — schedules itself on a loop matching era tempo.
+  _scheduleNextPulse() {
+    if (!this.enabled || !this.ready) return;
+    const bpm = this._bpm || 1.6;
+    const interval = 1000 / bpm;
+    this._pulseTimer = setTimeout(() => {
+      this._pulse();
+      this._scheduleNextPulse();
+    }, interval);
+  }
+
+  _pulse() {
+    if (!this.enabled || !this.ready) return;
+    try {
+      const ctx = this.ctx;
+      const now = ctx.currentTime;
+      const osc = ctx.createOscillator();
+      const g = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(120, now);
+      osc.frequency.exponentialRampToValueAtTime(48, now + 0.18);
+      g.gain.setValueAtTime(0.0001, now);
+      g.gain.exponentialRampToValueAtTime(0.09, now + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+      osc.connect(g);
+      g.connect(this.master);
+      osc.start(now);
+      osc.stop(now + 0.36);
+    } catch (e) { /* ignore */ }
+  }
+}
+
+/* ===== timeline ===== */
+/*
+ * THE RIVER OF SOUND — main application
+ * ------------------------------------------------------------
+ * A scroll-driven 3D journey down a glowing "river" whose waveform morphs
+ * to the character of each era of Black music. Built with Three.js (vendored).
+ */
+
+
+
+
+
+const N = ERAS.length;
+const REDUCE = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* ------------------------------------------------------------------ *
+ *  Small helpers
+ * ------------------------------------------------------------------ */
+const $ = (sel) => document.querySelector(sel);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const smoothstep = (t) => t * t * (3 - 2 * t);
+
+// Pre-parse the era colors into THREE.Color objects.
+const COL = ERAS.map((e) => ({
+  bg: new THREE.Color(e.colors.bg),
+  accent: new THREE.Color(e.colors.accent),
+  accent2: new THREE.Color(e.colors.accent2),
+}));
+
+const audio = new AudioEngine();
+
+/* ------------------------------------------------------------------ *
+ *  WebGL boot — fall back gracefully to a readable document
+ * ------------------------------------------------------------------ */
+let renderer;
+try {
+  const testCanvas = document.createElement("canvas");
+  const ok = window.WebGLRenderingContext &&
+    (testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl"));
+  if (!ok) throw new Error("no-webgl");
+  renderer = new THREE.WebGLRenderer({ canvas: $("#scene"), antialias: true, alpha: false });
+} catch (err) {
+  document.body.classList.add("no-webgl");
+  buildFallback();
+}
+
+/* ================================================================== *
+ *  3D SCENE
+ * ================================================================== */
+let scene, camera, curve, totalLen;
+let waveGeo, waveLine, wavePoints, lineMat, ptsMat;
+let nodeSprites = [];
+let stars;
+const U0 = 0.035, U1 = 0.965;           // keep the camera off the very ends
+const SAMPLES = 2000;                    // resolution of the waveform ribbon
+const WIDTH = 3.1;                       // world-space amplitude scale
+let base = null;                         // precomputed per-sample geometry data
+
+const tmpP = new THREE.Vector3();
+const tmpT = new THREE.Vector3();
+const tmpB = new THREE.Vector3();
+const tmpN = new THREE.Vector3();
+const WORLD_UP = new THREE.Vector3(0, 1, 0);
+const camPos = new THREE.Vector3();
+const camLook = new THREE.Vector3();
+
+function frameAt(u, outP, outT, outB) {
+  outP.copy(curve.getPointAt(clamp(u, 0, 1)));
+  outT.copy(curve.getTangentAt(clamp(u, 0, 1))).normalize();
+  outB.crossVectors(outT, WORLD_UP);
+  if (outB.lengthSq() < 1e-6) outB.set(1, 0, 0);
+  outB.normalize();
+}
+
+function initScene() {
+  scene = new THREE.Scene();
+  scene.background = COL[0].bg.clone();
+  scene.fog = new THREE.FogExp2(COL[0].bg.clone(), 0.0095);
+
+  camera = new THREE.PerspectiveCamera(62, innerWidth / innerHeight, 0.1, 3000);
+
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+
+  buildCurve();
+  buildWave();
+  buildNodes();
+  buildStars();
+
+  addEventListener("resize", onResize);
+}
+
+// A meandering river path that flows away from the camera (+Z) while
+// swaying in X and gently rising/falling in Y.
+function buildCurve() {
+  const pts = [];
+  const M = N * 2 + 4;
+  for (let i = 0; i <= M; i++) {
+    const z = i * 26;
+    const x = Math.sin(i * 0.62) * 17 + Math.sin(i * 0.21) * 7;
+    const y = Math.sin(i * 0.43) * 4.2 + Math.cos(i * 0.17) * 2;
+    pts.push(new THREE.Vector3(x, y, z));
+  }
+  curve = new THREE.CatmullRomCurve3(pts, false, "catmullrom", 0.5);
+  curve.arcLengthDivisions = 3000;
+  totalLen = curve.getLength();
+}
+
+// Map a sample index -> the interpolated era parameters at that point.
+function eraParamsAtP(p) {
+  const ePos = clamp(p * N - 0.5, 0, N - 1);
+  const i0 = Math.floor(ePos);
+  const i1 = Math.min(i0 + 1, N - 1);
+  const f = smoothstep(ePos - i0);
+  const a = ERAS[i0].wave, b = ERAS[i1].wave;
+  return {
+    amp: lerp(a.amp, b.amp, f),
+    freq: lerp(a.freq, b.freq, f),
+    sharp: lerp(a.sharp, b.sharp, f),
+    jitter: lerp(a.jitter, b.jitter, f),
+    swell: lerp(a.swell, b.swell, f),
+    speed: lerp(a.speed, b.speed, f),
+  };
+}
+
+function buildWave() {
+  // Precompute the static skeleton: base point, side direction, arc length,
+  // and the (static) interpolated wave parameters for every sample.
+  base = {
+    px: new Float32Array(SAMPLES), py: new Float32Array(SAMPLES), pz: new Float32Array(SAMPLES),
+    bx: new Float32Array(SAMPLES), by: new Float32Array(SAMPLES), bz: new Float32Array(SAMPLES),
+    arc: new Float32Array(SAMPLES),
+    amp: new Float32Array(SAMPLES), freq: new Float32Array(SAMPLES), sharp: new Float32Array(SAMPLES),
+    jitter: new Float32Array(SAMPLES), swell: new Float32Array(SAMPLES), speed: new Float32Array(SAMPLES),
+  };
+  for (let j = 0; j < SAMPLES; j++) {
+    const t = j / (SAMPLES - 1);
+    const u = lerp(U0, U1, t);
+    frameAt(u, tmpP, tmpT, tmpB);
+    base.px[j] = tmpP.x; base.py[j] = tmpP.y; base.pz[j] = tmpP.z;
+    base.bx[j] = tmpB.x; base.by[j] = tmpB.y; base.bz[j] = tmpB.z;
+    base.arc[j] = u * totalLen;
+    const pr = eraParamsAtP(t);
+    base.amp[j] = pr.amp; base.freq[j] = pr.freq; base.sharp[j] = pr.sharp;
+    base.jitter[j] = pr.jitter; base.swell[j] = pr.swell; base.speed[j] = pr.speed;
+  }
+
+  waveGeo = new THREE.BufferGeometry();
+  waveGeo.setAttribute("position", new THREE.BufferAttribute(new Float32Array(SAMPLES * 3), 3));
+
+  lineMat = new THREE.LineBasicMaterial({
+    color: COL[0].accent.clone(), transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  waveLine = new THREE.Line(waveGeo, lineMat);
+  waveLine.frustumCulled = false;
+  scene.add(waveLine);
+
+  ptsMat = new THREE.PointsMaterial({
+    color: COL[0].accent2.clone(), map: glowTexture(), size: 2.4, sizeAttenuation: true,
+    transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  wavePoints = new THREE.Points(waveGeo, ptsMat);
+  wavePoints.frustumCulled = false;
+  scene.add(wavePoints);
+
+  updateWave(0); // prime positions
+}
+
+// Recompute the living waveform for the current time.
+function updateWave(time) {
+  const pos = waveGeo.attributes.position.array;
+  for (let j = 0; j < SAMPLES; j++) {
+    const x = base.arc[j] * base.freq[j] * 0.22 + time * base.speed[j];
+    const s = Math.sin(x);
+    const shaped = (1 - base.sharp[j]) * s + base.sharp[j] * Math.tanh(s * 3) * 0.92;
+    const env = (1 - base.swell[j] * 0.5) +
+      base.swell[j] * 0.5 * (0.5 + 0.5 * Math.sin(base.arc[j] * 0.06 + time * 0.5));
+    const jit = base.jitter[j] * Math.sin(x * 5.3 + base.arc[j] * 1.7) * 0.5;
+    const w = (shaped * env + jit) * base.amp[j] * WIDTH;
+    const k = j * 3;
+    pos[k]     = base.px[j] + base.bx[j] * w;
+    pos[k + 1] = base.py[j] + w * 0.26;
+    pos[k + 2] = base.pz[j] + base.bz[j] * w;
+  }
+  waveGeo.attributes.position.needsUpdate = true;
+}
+
+// Glowing station markers at each era's center.
+function buildNodes() {
+  const tex = glowTexture();
+  ERAS.forEach((era, i) => {
+    const u = lerp(U0, U1, (i + 0.5) / N);
+    frameAt(u, tmpP, tmpT, tmpB);
+    const mat = new THREE.SpriteMaterial({
+      map: tex, color: COL[i].accent.clone(), transparent: true,
+      blending: THREE.AdditiveBlending, depthWrite: false, opacity: 0.9,
+    });
+    const sp = new THREE.Sprite(mat);
+    sp.position.set(tmpP.x, tmpP.y + 0.5, tmpP.z);
+    sp.scale.setScalar(9);
+    sp.userData.baseScale = 9;
+    scene.add(sp);
+    nodeSprites.push(sp);
+  });
+}
+
+// A drifting starfield for depth, spanning the whole river volume.
+function buildStars() {
+  const COUNT = REDUCE ? 600 : 2600;
+  const geo = new THREE.BufferGeometry();
+  const arr = new Float32Array(COUNT * 3);
+  const zmax = totalLen;
+  for (let i = 0; i < COUNT; i++) {
+    arr[i * 3]     = (Math.random() - 0.5) * 220;
+    arr[i * 3 + 1] = (Math.random() - 0.5) * 140 + 10;
+    arr[i * 3 + 2] = Math.random() * (zmax + 200) - 60;
+  }
+  geo.setAttribute("position", new THREE.BufferAttribute(arr, 3));
+  const mat = new THREE.PointsMaterial({
+    color: 0xbfd4ff, map: glowTexture(), size: 1.5, sizeAttenuation: true,
+    transparent: true, opacity: 0.5, blending: THREE.AdditiveBlending, depthWrite: false,
+  });
+  stars = new THREE.Points(geo, mat);
+  stars.frustumCulled = false;
+  scene.add(stars);
+}
+
+// Soft radial-gradient sprite used everywhere we want a neon glow.
+let _glow = null;
+function glowTexture() {
+  if (_glow) return _glow;
+  const c = document.createElement("canvas");
+  c.width = c.height = 128;
+  const g = c.getContext("2d");
+  const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+  grad.addColorStop(0.0, "rgba(255,255,255,1)");
+  grad.addColorStop(0.25, "rgba(255,255,255,0.85)");
+  grad.addColorStop(0.55, "rgba(255,255,255,0.25)");
+  grad.addColorStop(1.0, "rgba(255,255,255,0)");
+  g.fillStyle = grad;
+  g.fillRect(0, 0, 128, 128);
+  _glow = new THREE.CanvasTexture(c);
+  return _glow;
+}
+
+function onResize() {
+  if (!renderer) return;
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+}
+
+/* ================================================================== *
+ *  SCROLL + RENDER LOOP
+ * ================================================================== */
+let pTarget = 0, pSmooth = 0, lastActive = -1, lastTime = 0;
+const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+
+function maxScroll() {
+  return Math.max(1, document.documentElement.scrollHeight - innerHeight);
+}
+function onScroll() {
+  pTarget = clamp(window.scrollY / maxScroll(), 0, 1);
+  if (window.scrollY > 40) hideIntro();
+}
+
+function tick(now) {
+  requestAnimationFrame(tick);
+  const dt = Math.min(0.05, (now - lastTime) / 1000 || 0.016);
+  lastTime = now;
+  const time = now / 1000;
+
+  // Frame-rate-independent easing toward the scroll target.
+  const k = 1 - Math.exp(-dt * (REDUCE ? 12 : 4.2));
+  pSmooth += (pTarget - pSmooth) * k;
+
+  // Interpolated era state for color + active index.
+  const ePos = clamp(pSmooth * N - 0.5, 0, N - 1);
+  const i0 = Math.floor(ePos), i1 = Math.min(i0 + 1, N - 1);
+  const f = smoothstep(ePos - i0);
+  const active = clamp(Math.round(ePos), 0, N - 1);
+
+  // Colors morph between the two nearest eras.
+  scene.background.copy(COL[i0].bg).lerp(COL[i1].bg, f);
+  scene.fog.color.copy(scene.background);
+  lineMat.color.copy(COL[i0].accent).lerp(COL[i1].accent, f);
+  ptsMat.color.copy(COL[i0].accent2).lerp(COL[i1].accent2, f);
+
+  updateWave(time);
+
+  // Pulse the era markers; the active one breathes brighter.
+  for (let i = 0; i < nodeSprites.length; i++) {
+    const sp = nodeSprites[i];
+    const near = 1 - clamp(Math.abs(i - ePos), 0, 1.6) / 1.6;
+    const pulse = 1 + Math.sin(time * 2 + i) * 0.08;
+    sp.scale.setScalar(sp.userData.baseScale * (0.7 + near * 0.7) * pulse);
+    sp.material.opacity = 0.35 + near * 0.6;
+  }
+
+  // Camera glides along the river just behind the focus point.
+  const focusU = lerp(U0, U1, pSmooth);
+  mouse.x += (mouse.tx - mouse.x) * 0.05;
+  mouse.y += (mouse.ty - mouse.y) * 0.05;
+
+  frameAt(clamp(focusU - 0.013, 0, 1), camPos, tmpT, tmpB);
+  const sway = REDUCE ? 0 : 1;
+  camPos.x += tmpB.x * mouse.x * 6 + Math.sin(time * 0.5) * 1.4 * sway;
+  camPos.y += 7.2 + mouse.y * 3 + Math.sin(time * 0.6) * 0.5 * sway;
+  camPos.z += tmpB.z * mouse.x * 6;
+
+  curve.getPointAt(clamp(focusU + 0.03, 0, 1), camLook);
+  camLook.y += 2.2;
+  camera.position.copy(camPos);
+  camera.lookAt(camLook);
+
+  if (stars && !REDUCE) {
+    stars.rotation.z = Math.sin(time * 0.03) * 0.04;
+    stars.position.y = Math.sin(time * 0.1) * 1.5;
+  }
+
+  // UI: progress + active-era panel.
+  setProgress(pSmooth);
+  if (active !== lastActive) {
+    lastActive = active;
+    showEra(active);
+    audio.setEra(ERAS[active]);
+  }
+
+  renderer.render(scene, camera);
+}
+
+/* ================================================================== *
+ *  UI  (overlay DOM)
+ * ================================================================== */
+function setProgress(p) {
+  const bar = $("#progress-fill");
+  if (bar) bar.style.transform = `scaleX(${p})`;
+  dots.forEach((d, i) => {
+    const a = clamp(Math.round(p * N - 0.5), 0, N - 1) === i;
+    d.classList.toggle("active", a);
+  });
+}
+
+let panelBusy = null;
+function showEra(i) {
+  const era = ERAS[i];
+  const panel = $("#panel");
+  const lens = LENSES[era.lens];
+
+  const songsHTML = era.songs.filter(s => s.t).map((s) =>
+    `<a class="chip" href="${listenURL(s)}" target="_blank" rel="noopener">
+       <span class="play">▶</span>${s.t}${s.a ? ` <em>· ${s.a}</em>` : ""}
+     </a>`).join("");
+
+  const srcHTML = era.sources.map((s) =>
+    `<a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a>`).join("");
+
+  const seattleHTML = era.seattle
+    ? `<div class="seattle"><span class="pin">📍 Seattle</span>${era.seattle}</div>` : "";
+
+  const html = `
+    <div class="p-top">
+      <span class="lens lens-${era.lens}">${lens.label}</span>
+      <span class="years">${era.years}</span>
+    </div>
+    <h2 class="p-title">${era.title}</h2>
+    <p class="p-genre">${era.genre}</p>
+    <p class="p-hook">${era.hook}</p>
+    <p class="p-body">${era.body}</p>
+    <div class="p-voices">${era.voices.map(v => `<span>${v}</span>`).join("")}</div>
+    ${seattleHTML}
+    <div class="p-label">Listen</div>
+    <div class="p-songs">${songsHTML}</div>
+    <div class="p-label">Sources</div>
+    <div class="p-sources">${srcHTML}</div>
+  `;
+
+  // Cross-fade: out, swap, in.
+  panel.classList.add("fading");
+  if (panelBusy) clearTimeout(panelBusy);
+  panelBusy = setTimeout(() => {
+    panel.innerHTML = html;
+    panel.scrollTop = 0;
+    panel.classList.remove("fading");
+  }, REDUCE ? 0 : 220);
+
+  // Tint the panel's accent to match the era.
+  $("#overlay").style.setProperty("--accent", era.colors.accent);
+  $("#overlay").style.setProperty("--accent2", era.colors.accent2);
+  document.documentElement.style.setProperty("--era-accent", era.colors.accent);
+}
+
+/* ---- era dots navigation ---- */
+let dots = [];
+function buildDots() {
+  const nav = $("#dots");
+  ERAS.forEach((era, i) => {
+    const d = document.createElement("button");
+    d.className = "dot";
+    d.setAttribute("aria-label", `${era.years} — ${era.title}`);
+    d.innerHTML = `<span class="dot-label">${era.title}<small>${era.years}</small></span>`;
+    d.addEventListener("click", () => scrollToEra(i));
+    nav.appendChild(d);
+    dots.push(d);
+  });
+}
+
+function scrollToEra(i) {
+  hideIntro();
+  const targetP = (i + 0.5) / N;
+  const targetY = targetP * maxScroll();
+  smoothScrollTo(targetY, REDUCE ? 0 : 1100);
+}
+
+function smoothScrollTo(targetY, duration) {
+  if (duration <= 0) { window.scrollTo(0, targetY); return; }
+  const startY = window.scrollY;
+  const dist = targetY - startY;
+  const start = performance.now();
+  const ease = (t) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+  function step(now) {
+    const t = clamp((now - start) / duration, 0, 1);
+    window.scrollTo(0, startY + dist * ease(t));
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ---- intro overlay ---- */
+let introHidden = false;
+function hideIntro() {
+  if (introHidden) return;
+  introHidden = true;
+  $("#intro").classList.add("gone");
+}
+
+/* ---- about / sources modal ---- */
+function buildAbout() {
+  const body = $("#about-body");
+  const list = ERAS.map((e) => `
+    <div class="src-era">
+      <h4><span style="color:${e.colors.accent}">●</span> ${e.years} — ${e.title}</h4>
+      <ul>${e.sources.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a></li>`).join("")}</ul>
+    </div>`).join("");
+  body.innerHTML = `
+    <p class="about-lead">An interactive answer to the question:
+      <em>“How has Black music evolved throughout history, and how does it reflect
+      the issues of its time?”</em></p>
+    <p>Made from the standpoint of an 11th-grade <strong>Black Studies Honors</strong>
+      student in <strong>Seattle Public Schools</strong>. Each era is read through one of
+      the four lenses of the SPS / Washington Ethnic Studies framework — Origins &amp;
+      Identity, Power &amp; Oppression, Resistance &amp; Liberation, and Reflection &amp;
+      Action — and four “📍 Seattle” threads follow the music home to the Central District:
+      the Jackson Street jazz scene, Ray Charles &amp; Quincy Jones, Jimi Hendrix, and
+      Sir Mix-a-Lot.</p>
+    <p class="about-epi">“${EPIGRAPH.lines.join(" ")}”<br><span>— ${EPIGRAPH.attribution}</span></p>
+    <p class="about-method">Built with Three.js. The flowing “river” is a single audio
+      waveform whose amplitude, frequency, attack, and harmony are re-shaped for every
+      genre — sparse call-and-response swells for the spirituals, syncopated flutter for
+      jazz, hard square-wave boom-bap for hip-hop. The optional sound is fully synthesized
+      (no copyrighted recordings). Song links open a search so you can hear the originals.</p>
+    <h3>All sources, by era</h3>
+    <div class="src-grid">${list}</div>
+  `;
+}
+
+function openAbout() { $("#about").classList.add("open"); }
+function closeAbout() { $("#about").classList.remove("open"); }
+
+/* ================================================================== *
+ *  FALLBACK (no WebGL) — a fully readable vertical document
+ * ================================================================== */
+function buildFallback() {
+  const root = document.createElement("main");
+  root.id = "fallback";
+  root.innerHTML = `
+    <header class="fb-hero">
+      <p class="fb-kicker">An interactive timeline · Black Studies Honors · Seattle Public Schools</p>
+      <h1>The River of Sound</h1>
+      <p class="fb-sub">How has Black music evolved throughout history, and how does it
+        reflect the issues of its time?</p>
+      <blockquote>“${EPIGRAPH.lines.join(" ")}”<br><cite>— ${EPIGRAPH.attribution}</cite></blockquote>
+      <p class="fb-note">Your browser can’t run the 3D view, so here is the full timeline as text.</p>
+    </header>
+    ${ERAS.map((e, i) => `
+      <section class="fb-era" style="--a:${e.colors.accent};--b:${e.colors.accent2}">
+        <div class="fb-num">${String(i + 1).padStart(2, "0")}</div>
+        <div class="fb-meta"><span class="lens lens-${e.lens}">${LENSES[e.lens].label}</span>
+          <span class="years">${e.years}</span></div>
+        <h2>${e.title}</h2>
+        <p class="fb-genre">${e.genre}</p>
+        <p class="fb-body">${e.body}</p>
+        ${e.seattle ? `<p class="fb-seattle"><strong>📍 Seattle —</strong> ${e.seattle}</p>` : ""}
+        <p class="fb-voices"><strong>Voices:</strong> ${e.voices.join(" · ")}</p>
+        <p class="fb-listen"><strong>Listen:</strong> ${e.songs.filter(s => s.t).map(s =>
+          `<a href="${listenURL(s)}" target="_blank" rel="noopener">${s.t}${s.a ? ` (${s.a})` : ""}</a>`).join(" · ")}</p>
+        <p class="fb-src"><strong>Sources:</strong> ${e.sources.map(s =>
+          `<a href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join(" · ")}</p>
+      </section>`).join("")}
+    <footer class="fb-foot">Built with Three.js · all music synthesized for the audio bed ·
+      research cited above.</footer>
+  `;
+  document.body.appendChild(root);
+}
+
+/* ================================================================== *
+ *  BOOT
+ * ================================================================== */
+function fillIntro() {
+  $("#epigraph").innerHTML =
+    EPIGRAPH.lines.map(l => `<span>${l}</span>`).join("") +
+    `<cite>— ${EPIGRAPH.attribution}</cite>`;
+}
+
+function bindControls() {
+  $("#begin").addEventListener("click", () => {
+    hideIntro();
+    scrollToEra(0);
+    if (!REDUCE) audio.enable().then(updateSoundBtn);
+  });
+  $("#sound-toggle").addEventListener("click", async () => {
+    await audio.toggle();
+    updateSoundBtn();
+  });
+  $("#about-toggle").addEventListener("click", openAbout);
+  $("#about-close").addEventListener("click", closeAbout);
+  $("#about").addEventListener("click", (e) => { if (e.target.id === "about") closeAbout(); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") closeAbout(); });
+
+  addEventListener("pointermove", (e) => {
+    mouse.tx = (e.clientX / innerWidth - 0.5) * 2;
+    mouse.ty = (e.clientY / innerHeight - 0.5) * 2;
+  });
+}
+
+function updateSoundBtn() {
+  const on = audio.isEnabled();
+  const btn = $("#sound-toggle");
+  btn.classList.toggle("on", on);
+  btn.setAttribute("aria-pressed", String(on));
+  btn.querySelector(".s-label").textContent = on ? "Sound on" : "Sound off";
+}
+
+function main() {
+  fillIntro();
+  buildDots();
+  buildAbout();
+  bindControls();
+
+  if (!renderer) return; // fallback already rendered
+
+  // Set the scrollable height: roughly one viewport of scroll per era.
+  $("#scroll-space").style.height = `${(N + 1.4) * 100}vh`;
+
+  initScene();
+  showEra(0);
+  addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+  requestAnimationFrame(tick);
+}
+
+main();
+
+</script>
+</body>
+</html>
