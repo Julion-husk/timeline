@@ -4,8 +4,9 @@
 import { readFileSync, writeFileSync } from "fs";
 
 const css = readFileSync("css/style.css", "utf8");
-let data = readFileSync("src/data.js", "utf8").replace(/^export /gm, "");
-let audio = readFileSync("src/audio.js", "utf8").replace(/^export /gm, "");
+const strip = (s) => s.replace(/^export /gm, "").replace(/^import .*$/gm, "");
+let data = strip(readFileSync("src/data.js", "utf8"));
+let audio = strip(readFileSync("src/audio.js", "utf8"));
 let timeline = readFileSync("src/timeline.js", "utf8")
   .replace(/^import .*$/gm, "")
   // Version-proof the curve calls (use the return value, not the optional-target

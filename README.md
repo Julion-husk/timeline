@@ -88,9 +88,28 @@ the assets serve as-is.
 ### Controls
 - **Scroll** (or swipe) to flow down the river.
 - **Era dots** on the right — click to glide to any era.
-- **🔊 Sound** — an optional, *fully synthesized* ambient pad whose chord and tempo shift per era. **It plays no copyrighted recordings.** Song links open a search so you can hear the real tracks.
+- **🔊 Sound** — two layers through one mixer: **real songs** you add per era (see below), and, for any era with no song file, a **synthesized band** (kick / snare / hats / bass / pad) playing a groove tuned to that genre. Every era change goes **"underwater"** — a low-pass dip, a watery whoosh, and a crossfade — and jumping across several eras at once plays a quick **flyby montage** of each one.
 - **About & sources** — the full bibliography, grouped by era.
 - Respects `prefers-reduced-motion`, and falls back to a clean readable document if WebGL is unavailable.
+
+## 🎵 Add the songs (optional)
+
+Drop audio files into an **`audio/`** folder next to `index.html`, named by era id:
+
+```
+audio/roots.mp3   audio/spirituals.mp3  audio/blues.mp3     audio/jazz.mp3
+audio/gospel.mp3  audio/rocknroll.mp3   audio/soul.mp3      audio/funk.mp3
+audio/hiphop.mp3  audio/goldenage.mp3   audio/neosoul.mp3   audio/blm.mp3
+```
+
+`.mp3`, `.m4a`, `.ogg`, and `.wav` all work. Any era without a file just uses the
+synth band, so you can add as few or as many as you like. To start a track at its
+hook instead of the intro, add `audioStart: <seconds>` to that era in `src/data.js`.
+
+> The underwater **filter** touches the songs only when the page is served over
+> http (a local server or GitHub Pages). Opened straight from a file (the
+> single-file build), songs still crossfade and get a brief pitch-warp "dive,"
+> and the synth always gets the full filtered effect.
 
 ---
 

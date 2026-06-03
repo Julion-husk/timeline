@@ -254,7 +254,7 @@ function onResize() {
 /* ================================================================== *
  *  SCROLL + RENDER LOOP
  * ================================================================== */
-let pTarget = 0, pSmooth = 0, lastActive = -1, lastTime = 0;
+let pTarget = 0, pSmooth = 0, lastActive = -1, lastTime = 0, lastEraChangeMs = 0;
 const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
 
 function maxScroll() {
@@ -322,9 +322,12 @@ function tick(now) {
   // UI: progress + active-era panel.
   setProgress(pSmooth);
   if (active !== lastActive) {
+    const fast = (now - lastEraChangeMs) < 480;   // rapid pass-through (flyby)
+    lastEraChangeMs = now;
     lastActive = active;
     showEra(active);
-    audio.setEra(ERAS[active]);
+    audio.setEra(active);
+    triggerDive(fast);
   }
 
   renderer.render(scene, camera);
@@ -340,6 +343,18 @@ function setProgress(p) {
     const a = clamp(Math.round(p * N - 0.5), 0, N - 1) === i;
     d.classList.toggle("active", a);
   });
+}
+
+// The "underwater" wash on every era change — a quick blur + blue tint that
+// surfaces back to clarity. A flyby (rapid jump) pulses it harder and shorter.
+let diveTimer = null;
+function triggerDive(fast) {
+  const el = $("#dive");
+  if (!el || REDUCE) return;
+  el.classList.add("active");
+  el.classList.toggle("strong", !!fast);
+  if (diveTimer) clearTimeout(diveTimer);
+  diveTimer = setTimeout(() => el.classList.remove("active", "strong"), fast ? 280 : 760);
 }
 
 let panelBusy = null;
