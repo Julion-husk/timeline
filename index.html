@@ -17,10 +17,12 @@
 
 <link rel="stylesheet" href="./css/style.css" />
 
-<!-- Three.js r160 via CDN. For fully-offline use, download it to ./vendor/three.module.js
-     (see README) and change the URL below to "./vendor/three.module.js". -->
+<!-- Three.js r160 from the local vendored copy (no network needed).
+     Served over http(s) this needs a browser with import-map support; for the
+     most universal option (any browser, double-click or URL), use the
+     self-contained river-of-sound.html build instead. -->
 <script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js" } }
+{ "imports": { "three": "./vendor/three.module.js" } }
 </script>
 </head>
 <body>

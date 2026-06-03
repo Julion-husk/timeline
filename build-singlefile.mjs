@@ -22,10 +22,12 @@ html = html.replace(
   `<style>\n${css}\n</style>`
 );
 
-// swap the ES-module import map for a UMD global build of Three.js
+// inline a UMD global build of Three.js — fully self-contained: no CDN, no
+// modules, so the one file works identically on file:// and over any URL.
+const threeUMD = readFileSync("vendor/three.umd.min.js", "utf8");
 html = html.replace(
   /<!-- Three\.js[\s\S]*?<\/script>/,
-  '<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>'
+  `<script>/* Three.js r128 (UMD, MIT License) — inlined so this file needs no network */\n${threeUMD}\n</script>`
 );
 
 // swap the module entry point for one inline, non-module script
