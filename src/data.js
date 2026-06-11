@@ -8,13 +8,9 @@
  *
  * Each era is read through one of the four lenses of the SPS / WA State
  * Ethnic Studies framework — Origins & Identity, Power & Oppression,
- * Resistance & Liberation, and Reflection & Action — so the project speaks
- * the same language as the course it was made for.
+ * Resistance & Liberation, and Reflection & Action.
  *
- * Every claim below is anchored to a credible source listed in `sources`
- * (Smithsonian / NMAAHC, the Library of Congress, HistoryLink.org for the
- * Seattle threads, Britannica, PBS, NPR, History.com). Song links open a
- * YouTube search so the listener can hear the music for themselves.
+ * Song links open a YouTube search so the listener can hear the music.
  */
 
 export const EPIGRAPH = {
@@ -38,24 +34,21 @@ export const ERAS = [
   /* 1 ───────────────────────────────────────────────────────── */
   {
     id: "roots",
-    years: "Before 1619",
-    title: "Before the Word, the Drum",
-    genre: "West & Central African roots",
+    years: "Origins (Pre-1600s)",
+    title: "Basic African Drums",
+    genre: "West African drumming",
     lens: "identity",
-    hook: "“The drum talks; the people answer.”",
+    hook: "“Ceremony, storytelling, communication.”",
     body:
-      "Every genre downstream of this point begins in West and Central Africa, where music was never " +
-      "merely entertainment — it was memory, law, worship, and news. The griot carried a community’s " +
-      "entire history in song; the talking drum imitated speech; and everyone answered the leader’s line " +
-      "in <em>call-and-response</em>. When millions were stolen through the Middle Passage, captors could " +
-      "take their freedom but not these tools. Polyrhythm, the bent “blue note,” improvisation, and " +
-      "call-and-response survived in the body — the hidden source code of everything that follows.",
-    voices: ["Griots", "Talking drums", "Polyrhythm", "Call-and-response"],
-    songs: [{ t: "West African drum & griot tradition", a: "" }],
+      "The drums were the predecessor to modern Black music. In West Africa, drums weren’t only an " +
+      "instrument of beat; they were cultural instruments used in ceremonies, storytelling, and " +
+      "communication. Enslaved Africans brought with them drums like the Djembe, bringing those cultural " +
+      "traditions with them.",
+    voices: ["The Djembe", "West African drummers"],
+    songs: [{ t: "Djembe drumming", a: "" }],
     seattle: null,
     sources: [
-      { label: "Smithsonian NMAAHC — Musical Crossroads", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
-      { label: "Smithsonian Music — Musical Crossroads", url: "https://music.si.edu/story/musical-crossroads" },
+      { label: "The History of the Djembe Drum — Drum Roots", url: "https://www.drumroots.org.uk/2025/06/the-fascinating-history-of-the-djembe-drum-a-journey-through-rhythm-and-culture/" },
     ],
     colors: { bg: "#160d07", accent: "#ff9d3c", accent2: "#ffd28a" },
     wave: { amp: 0.80, freq: 1.1, sharp: 0.06, jitter: 0.10, swell: 0.85, speed: 0.45 },
@@ -64,30 +57,23 @@ export const ERAS = [
   /* 2 ───────────────────────────────────────────────────────── */
   {
     id: "spirituals",
-    years: "1619 – 1865",
-    title: "Steal Away",
-    genre: "Spirituals · field hollers · work songs",
+    years: "1800s",
+    title: "Wade in the Water",
+    genre: "Spirituals · the “Sorrow Songs”",
     lens: "resistance",
     hook: "“Wade in the water, children…”",
     body:
-      "Enslaved people were forbidden to read, write, or gather freely — so they testified in song. " +
-      "Spirituals and field hollers turned Christian imagery into a double language: “Heaven” could mean " +
-      "the North, the “Jordan” the Ohio River, and <em>Wade in the Water</em> a warning to throw the " +
-      "bloodhounds off the scent. Harriet Tubman is said to have used spirituals as signals on the " +
-      "Underground Railroad. Historians debate how literally any song worked as a map — but whether map " +
-      "or metaphor, the music did real work: it organized hope, preserved dignity, and made a way to " +
-      "endure, and sometimes escape, the unendurable.",
-    voices: ["The ring shout", "Harriet Tubman", "Fisk Jubilee Singers"],
-    songs: [
-      { t: "Wade in the Water", a: "Negro spiritual" },
-      { t: "Swing Low, Sweet Chariot", a: "Negro spiritual" },
-      { t: "Steal Away", a: "Negro spiritual" },
-    ],
+      "Wade in the Water is widely associated with the Underground Railroad. W.E.B. Du Bois called the " +
+      "genre of the acapella song “Sorrow Songs.” This genre was created by enslaved Black Americans. " +
+      "Sorrow songs were very spiritual, but were sometimes encoded with other meanings. Some examples of " +
+      "this are songs being used to communicate immediate alerts along with the escape through the " +
+      "Underground Railroad. Wade in the Water, specifically, has the message of wading through the water " +
+      "to lose bloodhounds’ trail.",
+    voices: ["W.E.B. Du Bois", "The “Sorrow Songs”"],
+    songs: [{ t: "Wade in the Water", a: "Negro spiritual" }],
     seattle: null,
     sources: [
-      { label: "NMAAHC — Musical Crossroads (Roots & Agency)", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
-      { label: "“Wade in the Water” — Wikipedia", url: "https://en.wikipedia.org/wiki/Wade_in_the_Water" },
-      { label: "WHYY — Decoding Underground Railroad songs", url: "https://whyy.org/articles/underground-railroad-expert-decodes-songs-with-practical-advice-for-fleeing-slaves/" },
+      { label: "Behind the Meaning of “Wade in the Water” — American Songwriter", url: "https://americansongwriter.com/behind-the-meaning-of-the-classic-gospel-song-wade-in-the-water/" },
     ],
     colors: { bg: "#07101f", accent: "#5b8cff", accent2: "#aecbff" },
     wave: { amp: 0.66, freq: 0.9, sharp: 0.0, jitter: 0.04, swell: 1.45, speed: 0.38 },
@@ -96,27 +82,20 @@ export const ERAS = [
   /* 3 ───────────────────────────────────────────────────────── */
   {
     id: "blues",
-    years: "c. 1900 – 1920s",
-    title: "Trouble in Mind",
+    years: "Early 1920s",
+    title: "Downhearted Blues",
     genre: "The Blues",
     lens: "power",
-    hook: "“I hate to see that evenin’ sun go down.”",
+    hook: "“The Empress of the Blues.”",
     body:
-      "Freedom on paper met Jim Crow in fact: sharecropping debt, segregation, and the daily threat of " +
-      "violence. Out of the Mississippi Delta came the blues — three chords, twelve bars, and a brutally " +
-      "honest “I.” The blue notes bent between the cracks of the piano keys the way Black life bent around " +
-      "the cracks of the law. W.C. Handy wrote it down, Bessie Smith — the “Empress of the Blues” — sold " +
-      "millions, and the form became the grammar of nearly all American popular music to come. The blues " +
-      "did not cause the sorrow; it <em>named</em> it, and naming it was a kind of power.",
-    voices: ["W.C. Handy", "Bessie Smith", "Ma Rainey", "Robert Johnson"],
-    songs: [
-      { t: "Downhearted Blues", a: "Bessie Smith" },
-      { t: "Cross Road Blues", a: "Robert Johnson" },
-    ],
+      "Downhearted Blues was written by two Black women, Alberta Hunter and Lovie Austin. Over 750 " +
+      "thousand copies were sold and earned Bessie Smith the title, “Empress of the Blues,” showing " +
+      "record labels the audience for blues music is huge and should not be underestimated.",
+    voices: ["Alberta Hunter", "Lovie Austin", "Bessie Smith"],
+    songs: [{ t: "Downhearted Blues", a: "Bessie Smith" }],
     seattle: null,
     sources: [
-      { label: "Britannica — Blues (music)", url: "https://www.britannica.com/art/blues-music" },
-      { label: "NMAAHC — Musical Crossroads", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
+      { label: "“Down Hearted Blues” — Library of Congress (National Recording Registry)", url: "https://www.loc.gov/static/programs/national-recording-preservation-board/documents/Down-HeartedBlues.pdf" },
     ],
     colors: { bg: "#140a18", accent: "#9a5bff", accent2: "#cfa8ff" },
     wave: { amp: 0.90, freq: 1.5, sharp: 0.10, jitter: 0.16, swell: 0.70, speed: 0.55 },
@@ -125,33 +104,21 @@ export const ERAS = [
   /* 4 ───────────────────────────────────────────────────────── */
   {
     id: "jazz",
-    years: "1920s – 1930s",
-    title: "Take the A Train",
-    genre: "Jazz & the Harlem Renaissance",
+    years: "Late 1920s",
+    title: "West End Blues",
+    genre: "Jazz",
     lens: "identity",
-    hook: "“The freedom to invent yourself — even in a segregated room.”",
+    hook: "“The day jazz changed forever.”",
     body:
-      "The Great Migration carried six million Black Americans north and west, toward jobs and away from " +
-      "terror. In crowded new cities the blues went bright and modern and became jazz — improvised, " +
-      "swinging, brand-new. Harlem’s “New Negro” Renaissance made Black art a declaration of full " +
-      "citizenship; Louis Armstrong’s trumpet and Duke Ellington’s orchestra were sonic proof of genius. " +
-      "The contradiction was loud: at the Cotton Club, Black musicians played for whites-only crowds. By " +
-      "1939 Billie Holiday turned this music toward open protest with <em>Strange Fruit</em>, an " +
-      "anti-lynching ballad now called the first modern protest song.",
-    voices: ["Louis Armstrong", "Duke Ellington", "Bessie Smith", "Billie Holiday"],
-    songs: [
-      { t: "Take the A Train", a: "Duke Ellington" },
-      { t: "West End Blues", a: "Louis Armstrong" },
-      { t: "Strange Fruit", a: "Billie Holiday" },
-    ],
-    seattle:
-      "The same years lit up S. Jackson Street, the spine of Seattle’s Central District. Its clubs were " +
-      "among the only rooms in town where Black, white, and Asian residents met as social equals — the " +
-      "cradle of the city’s first real music scene.",
+      "In 1928, King Oliver wrote West End Blues for Louis Armstrong and His Hot Five. The intro changed " +
+      "how the genre of jazz was played and showed that an individual in a band could steal the show with " +
+      "a solo. Billie Holiday was inspired by this intro and song to build her career. Louis Armstrong " +
+      "went on to become the greatest jazz artist of all time.",
+    voices: ["King Oliver", "Louis Armstrong", "Billie Holiday"],
+    songs: [{ t: "West End Blues", a: "Louis Armstrong" }],
+    seattle: null,
     sources: [
-      { label: "HistoryLink — Jackson Street Jazz Scene (Seattle)", url: "https://www.historylink.org/File/22930" },
-      { label: "HistoryLink — Rhythm & Roots: Seattle’s First Sound", url: "https://www.historylink.org/File/3641" },
-      { label: "Britannica — “Strange Fruit”", url: "https://www.britannica.com/topic/Strange-Fruit-song" },
+      { label: "The Day Jazz Changed Forever — uDiscover Music", url: "https://www.udiscovermusic.com/stories/the-day-jazz-changed-forever/" },
     ],
     colors: { bg: "#1a1305", accent: "#ffc24a", accent2: "#ffe6a8" },
     wave: { amp: 0.80, freq: 3.2, sharp: 0.12, jitter: 0.46, swell: 0.60, speed: 1.00 },
@@ -188,39 +155,6 @@ export const ERAS = [
 
   /* 6 ───────────────────────────────────────────────────────── */
   {
-    id: "rocknroll",
-    years: "late 1940s – 1950s",
-    title: "Tutti Frutti",
-    genre: "Rhythm & Blues → the birth of Rock ’n’ Roll",
-    lens: "power",
-    hook: "“They integrated the teenagers faster than the law integrated the schools.”",
-    body:
-      "After the war, gospel’s fire and the blues’ beat collided into rhythm & blues, then rock ’n’ roll. " +
-      "Chuck Berry’s storytelling and Little Richard’s scream were Black, defiant, and explosively new — " +
-      "Berry called his style “one long Sister Rosetta Tharpe impersonation.” But the color line ran " +
-      "straight through the charts: white artists covered Black songs for bigger sales and softer radio, " +
-      "and a sanitized “King” was crowned while the inventors were pushed to the margins. The music " +
-      "integrated American teenagers years before the law integrated their schools.",
-    voices: ["Chuck Berry", "Little Richard", "Fats Domino", "Big Mama Thornton"],
-    songs: [
-      { t: "Tutti Frutti", a: "Little Richard" },
-      { t: "Johnny B. Goode", a: "Chuck Berry" },
-    ],
-    seattle:
-      "In 1948 a blind 17-year-old named Ray Charles stepped off a bus and cut his first records here; " +
-      "his Maxin Trio gigged on Jackson Street alongside teenage Quincy Jones and Ernestine Anderson. " +
-      "Seattle’s scene helped raise three future legends.",
-    sources: [
-      { label: "HistoryLink — Jackson Street Jazz Scene (Ray Charles, 1948)", url: "https://www.historylink.org/File/22930" },
-      { label: "HistoryLink — Quincy Jones (1933–2024)", url: "https://historylink.org/File/10354" },
-      { label: "Britannica — Sister Rosetta Tharpe", url: "https://www.britannica.com/biography/Sister-Rosetta-Tharpe" },
-    ],
-    colors: { bg: "#1a0707", accent: "#ff5a4d", accent2: "#ffb38f" },
-    wave: { amp: 0.95, freq: 2.4, sharp: 0.35, jitter: 0.12, swell: 0.50, speed: 0.92 },
-  },
-
-  /* 7 ───────────────────────────────────────────────────────── */
-  {
     id: "soul",
     years: "1960s",
     title: "A Change Is Gonna Come",
@@ -250,40 +184,7 @@ export const ERAS = [
     wave: { amp: 0.85, freq: 1.7, sharp: 0.08, jitter: 0.10, swell: 0.85, speed: 0.60 },
   },
 
-  /* 8 ───────────────────────────────────────────────────────── */
-  {
-    id: "funk",
-    years: "late 1960s – 1970s",
-    title: "Say It Loud",
-    genre: "Funk & the Black Power era",
-    lens: "identity",
-    hook: "“Say it loud — I’m Black and I’m proud.”",
-    body:
-      "When nonviolence met fire hoses and assassinations, the mood hardened from <em>hope</em> to " +
-      "<em>pride and power</em>. In 1968 James Brown released “Say It Loud — I’m Black and I’m Proud,” and " +
-      "a generation traded the word “Negro” for “Black.” Funk made the downbeat — “the One” — heavy and " +
-      "unapologetic; Sly Stone, Gil Scott-Heron (“The Revolution Will Not Be Televised”), and " +
-      "Parliament-Funkadelic turned liberation into something you could dance to. Marvin Gaye’s " +
-      "<em>What’s Going On</em> (1971) mourned Vietnam, poverty, and a planet in trouble.",
-    voices: ["James Brown", "Sly & the Family Stone", "Gil Scott-Heron", "Marvin Gaye"],
-    songs: [
-      { t: "Say It Loud – I’m Black and I’m Proud", a: "James Brown" },
-      { t: "Star-Spangled Banner (Live at Woodstock)", a: "Jimi Hendrix" },
-      { t: "What’s Going On", a: "Marvin Gaye" },
-    ],
-    seattle:
-      "At Woodstock in 1969, Garfield High’s own Jimi Hendrix tore “The Star-Spangled Banner” into sirens " +
-      "and screams — a Black Seattleite forcing America to hear its own anthem through the chaos of war.",
-    sources: [
-      { label: "“Say It Loud – I’m Black and I’m Proud” — Wikipedia", url: "https://en.wikipedia.org/wiki/Say_It_Loud_%E2%80%93_I%27m_Black_and_I%27m_Proud" },
-      { label: "JimiHendrix.com — Star-Spangled Banner at Woodstock", url: "https://www.jimihendrix.com/editorial/star-spangled-banner-jimi-hendrix-at-woodstock-the-anthem-of-a-generation/" },
-      { label: "HistoryLink — Jimi Hendrix (1942–1970)", url: "https://www.historylink.org/file/2498" },
-    ],
-    colors: { bg: "#0f061a", accent: "#b6ff3a", accent2: "#ff5ee6" },
-    wave: { amp: 1.00, freq: 2.2, sharp: 0.50, jitter: 0.20, swell: 0.50, speed: 0.95 },
-  },
-
-  /* 9 ───────────────────────────────────────────────────────── */
+  /* 7 ───────────────────────────────────────────────────────── */
   {
     id: "hiphop",
     years: "1973 – early 1980s",
@@ -312,25 +213,26 @@ export const ERAS = [
     wave: { amp: 1.10, freq: 2.0, sharp: 0.72, jitter: 0.16, swell: 0.40, speed: 0.82 },
   },
 
-  /* 10 ──────────────────────────────────────────────────────── */
+  /* 8 ───────────────────────────────────────────────────────── */
   {
     id: "goldenage",
     years: "late 1980s – 1990s",
-    title: "Fight the Power",
+    title: "F*** The Police",
     genre: "The Golden Age — rap as resistance",
     lens: "power",
-    hook: "“Black America’s frontline news, set to a beat.”",
+    hook: "“F*** the police comin straight from the underground!”",
     body:
-      "Hip-hop grew up angry and articulate. As the War on Drugs and mandatory-minimum sentencing filled " +
-      "prisons with young Black men, rap became Black America’s frontline news. Public Enemy’s <em>Fight " +
-      "the Power</em> (1989) scored Spike Lee’s <em>Do the Right Thing</em>; N.W.A’s “F— tha Police” " +
-      "(1988) testified to everyday police violence so vividly that the FBI mailed the label a warning. " +
-      "When the officers who beat Rodney King were acquitted in 1992, Los Angeles erupted — and the " +
-      "records had already told you why. This is “power and oppression” set to a breakbeat.",
-    voices: ["Public Enemy", "N.W.A", "Tupac Shakur", "Queen Latifah"],
+      "1988, Compton California, five men came together, the hip hop group known as N.W.A. This was the " +
+      "year they would go on to release one of the most influential anti-police harassment songs of all " +
+      "time. F*** The Police was a direct call out based on real life actions and experience, through " +
+      "shared hatred for the unlawful actions being committed by law enforcement, the group not only " +
+      "shared their message in an undeniable way, but they also established a legacy. This legacy is one " +
+      "that has been reciprocated throughout protests and movements to this day, with the song being " +
+      "played at many modern-day events, including ones such as the George Floyd protests in 2020.",
+    voices: ["N.W.A"],
     songs: [
       { t: "Fight the Power", a: "Public Enemy" },
-      { t: "Straight Outta Compton", a: "N.W.A" },
+      { t: "F*** The Police", a: "N.W.A" },
     ],
     seattle:
       "Sir Mix-a-Lot’s “Posse on Broadway” (1988) — cruising Seattle’s own streets — and his Nastymix " +
@@ -338,14 +240,14 @@ export const ERAS = [
       "the coasts.",
     sources: [
       { label: "“Fight the Power” (Public Enemy) — Wikipedia", url: "https://en.wikipedia.org/wiki/Fight_the_Power_(Public_Enemy_song)" },
-      { label: "“F— tha Police” (N.W.A) — Wikipedia", url: "https://en.wikipedia.org/wiki/Fuck_tha_Police" },
+      { label: "“F*** tha Police” (N.W.A) — Wikipedia", url: "https://en.wikipedia.org/wiki/Fuck_tha_Police" },
       { label: "HistoryLink — Nastymix / Sir Mix-A-Lot Gold Record (1989)", url: "https://www.historylink.org/file/9793" },
     ],
     colors: { bg: "#120a06", accent: "#ffcf3a", accent2: "#ff5151" },
     wave: { amp: 1.05, freq: 2.7, sharp: 0.55, jitter: 0.30, swell: 0.45, speed: 1.00 },
   },
 
-  /* 11 ──────────────────────────────────────────────────────── */
+  /* 9 ──────────────────────────────────────────────────────── */
   {
     id: "neosoul",
     years: "late 1990s – 2000s",
@@ -354,12 +256,13 @@ export const ERAS = [
     lens: "reflection",
     hook: "“A generation asking what it had gained and lost.”",
     body:
-      "Against a backdrop of bling and big-label commercialism, a wave of artists turned back toward the " +
-      "roots. Lauryn Hill’s <em>The Miseducation of Lauryn Hill</em> (1998) wove gospel, soul, reggae, and " +
-      "hip-hop into a meditation on love, faith, and self-respect; Erykah Badu and D’Angelo made " +
-      "“neo-soul” a home for Black introspection. The lens here is <em>reflection</em>: a generation " +
-      "reclaiming live instruments, spirituality, and — above all — the voice of Black women at the " +
-      "center of the story.",
+      "By the 1990’s, hip hop had solidified itself as a cultural pillar in America, but its presence " +
+      "still had its flaws; artist Lauryn Hill was the one to point them out. From its early beginnings " +
+      "hip hop had a divide in gender, an issue of objectivity and disrespect. Through the song Doo Wop, " +
+      "Hill spoke on both genders and their flawed portrayal of identities; she did so without putting " +
+      "herself above it all, showing that the issue was not necessarily individual, but systemic. By " +
+      "doing so, she opened a new lane for the genre, one in which people could be vulnerable and admit " +
+      "to their faults.",
     voices: ["Lauryn Hill", "Erykah Badu", "D’Angelo", "The Roots"],
     songs: [
       { t: "Doo-Wop (That Thing)", a: "Lauryn Hill" },
@@ -374,26 +277,26 @@ export const ERAS = [
     wave: { amp: 0.80, freq: 1.6, sharp: 0.10, jitter: 0.12, swell: 0.95, speed: 0.55 },
   },
 
-  /* 12 ──────────────────────────────────────────────────────── */
+  /* 10 ──────────────────────────────────────────────────────── */
   {
     id: "blm",
     years: "2013 – present",
-    title: "Alright",
+    title: "All the Stars",
     genre: "The Black Lives Matter era",
     lens: "reflection",
-    hook: "“We gon’ be alright.”",
+    hook: "“Love, let’s talk about love.”",
     body:
-      "After the killings of Trayvon Martin (2012), Michael Brown in Ferguson (2014), and George Floyd " +
-      "(2020), #BlackLivesMatter turned grief into a movement — and music answered, again. Kendrick " +
-      "Lamar’s <em>Alright</em> (2015) became a literal chant in the streets, called this generation’s " +
-      "“We Shall Overcome.” Beyoncé’s <em>Lemonade</em> and “Formation” (2016) centered Black Southern " +
-      "womanhood; Childish Gambino’s “This Is America” (2018) crammed gun violence, minstrelsy, and police " +
-      "terror into four shocking minutes. Four hundred years on, the river runs straight from the spiritual " +
-      "to the streaming single — and the music still names the issue, because naming it is still power.",
-    voices: ["Kendrick Lamar", "Beyoncé", "Childish Gambino", "Solange"],
+      "Black Panther was a colossal release in the cinema industry; it brought forth Black pride and " +
+      "empowerment, reaching a level of popularity far out of the reach of most movies. But this success " +
+      "did not just come from the high-level acting or production quality; the music played a massive role " +
+      "as well. All The Stars by Kendrick Lamar featuring SZA was not just a soundtrack; it was a " +
+      "representation of history, culture, and innovation. The song features callbacks to themes of " +
+      "Afrofuturism, mythology, and much more. Its tone and lyricism called attention to the individuality " +
+      "and beauty of African culture, all while looking stunning both in theatres and music videos.",
+    voices: ["Kendrick Lamar", "SZA"],
     songs: [
-      { t: "Alright", a: "Kendrick Lamar" },
-      { t: "Formation", a: "Beyoncé" },
+      { t: "All The Stars", a: "Kendrick Lamar, SZA" },
+      { t: "Alright", a: "Beyoncé" },
       { t: "This Is America", a: "Childish Gambino" },
     ],
     seattle:

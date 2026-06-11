@@ -262,7 +262,6 @@ function maxScroll() {
 }
 function onScroll() {
   pTarget = clamp(window.scrollY / maxScroll(), 0, 1);
-  if (window.scrollY > 40) hideIntro();
 }
 
 function tick(now) {
@@ -407,7 +406,6 @@ function buildDots() {
 }
 
 function scrollToEra(i) {
-  hideIntro();
   const targetP = (i + 0.5) / N;
   const targetY = targetP * maxScroll();
   smoothScrollTo(targetY, REDUCE ? 0 : 1100);
@@ -426,47 +424,6 @@ function smoothScrollTo(targetY, duration) {
   }
   requestAnimationFrame(step);
 }
-
-/* ---- intro overlay ---- */
-let introHidden = false;
-function hideIntro() {
-  if (introHidden) return;
-  introHidden = true;
-  $("#intro").classList.add("gone");
-}
-
-/* ---- about / sources modal ---- */
-function buildAbout() {
-  const body = $("#about-body");
-  const list = ERAS.map((e) => `
-    <div class="src-era">
-      <h4><span style="color:${e.colors.accent}">●</span> ${e.years} — ${e.title}</h4>
-      <ul>${e.sources.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a></li>`).join("")}</ul>
-    </div>`).join("");
-  body.innerHTML = `
-    <p class="about-lead">An interactive answer to the question:
-      <em>“How has Black music evolved throughout history, and how does it reflect
-      the issues of its time?”</em></p>
-    <p>Made from the standpoint of an 11th-grade <strong>Black Studies Honors</strong>
-      student in <strong>Seattle Public Schools</strong>. Each era is read through one of
-      the four lenses of the SPS / Washington Ethnic Studies framework — Origins &amp;
-      Identity, Power &amp; Oppression, Resistance &amp; Liberation, and Reflection &amp;
-      Action — and four “📍 Seattle” threads follow the music home to the Central District:
-      the Jackson Street jazz scene, Ray Charles &amp; Quincy Jones, Jimi Hendrix, and
-      Sir Mix-a-Lot.</p>
-    <p class="about-epi">“${EPIGRAPH.lines.join(" ")}”<br><span>— ${EPIGRAPH.attribution}</span></p>
-    <p class="about-method">Built with Three.js. The flowing “river” is a single audio
-      waveform whose amplitude, frequency, attack, and harmony are re-shaped for every
-      genre — sparse call-and-response swells for the spirituals, syncopated flutter for
-      jazz, hard square-wave boom-bap for hip-hop. The optional sound is fully synthesized
-      (no copyrighted recordings). Song links open a search so you can hear the originals.</p>
-    <h3>All sources, by era</h3>
-    <div class="src-grid">${list}</div>
-  `;
-}
-
-function openAbout() { $("#about").classList.add("open"); }
-function closeAbout() { $("#about").classList.remove("open"); }
 
 /* ================================================================== *
  *  FALLBACK (no WebGL) — a fully readable vertical document
@@ -507,28 +464,12 @@ function buildFallback() {
 /* ================================================================== *
  *  BOOT
  * ================================================================== */
-function fillIntro() {
-  $("#epigraph").innerHTML =
-    EPIGRAPH.lines.map(l => `<span>${l}</span>`).join("") +
-    `<cite>— ${EPIGRAPH.attribution}</cite>`;
-}
-
 function bindControls() {
   audio.onStatus = (s) => { lastStatus = s; updateSoundBtn(); };
-  $("#begin").addEventListener("click", () => {
-    hideIntro();
-    scrollToEra(0);
-    if (!REDUCE) audio.enable().then(updateSoundBtn);
-  });
   $("#sound-toggle").addEventListener("click", async () => {
     await audio.toggle();
     updateSoundBtn();
   });
-  $("#about-toggle").addEventListener("click", openAbout);
-  $("#about-close").addEventListener("click", closeAbout);
-  $("#about").addEventListener("click", (e) => { if (e.target.id === "about") closeAbout(); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape") closeAbout(); });
-
   addEventListener("pointermove", (e) => {
     mouse.tx = (e.clientX / innerWidth - 0.5) * 2;
     mouse.ty = (e.clientY / innerHeight - 0.5) * 2;
@@ -547,9 +488,7 @@ function updateSoundBtn() {
 }
 
 function main() {
-  fillIntro();
   buildDots();
-  buildAbout();
   bindControls();
 
   if (!renderer) return; // fallback already rendered

@@ -34,29 +34,25 @@ Studies framework** — the same ones used in the course it was built for:
 
 ### 📍 The Seattle thread
 Because the standpoint is *Seattle*, the river keeps coming home to the **Central
-District**. Four stops follow the music to this city specifically:
+District**:
 
-- **Jazz** — the **Jackson Street** scene, the cradle of Seattle’s first music culture.
-- **Rock ’n’ Roll** — a 17-year-old **Ray Charles** cuts his first records here in 1948, gigging alongside teenage **Quincy Jones** and **Ernestine Anderson**.
-- **Funk / Black Power** — **Jimi Hendrix** of **Garfield High** reinvents “The Star-Spangled Banner” at Woodstock.
+- **Soul** — a young **Jimi Hendrix** teaching himself guitar in the Central District.
 - **Golden-Age hip-hop** — **Sir Mix-a-Lot**’s *Posse on Broadway* and the **Nastymix** label “put Seattle on the rap map.”
 
 ---
 
-## The twelve stations
+## The ten stations
 
-1. **Before the Word, the Drum** — West & Central African roots *(pre-1619)*
-2. **Steal Away** — Spirituals, field hollers & work songs *(1619–1865)*
-3. **Trouble in Mind** — The Blues *(c. 1900–1920s)*
-4. **Take the A Train** — Jazz & the Harlem Renaissance *(1920s–30s)* 📍
+1. **Basic African Drums** — West African drumming *(Origins, pre-1600s)*
+2. **Wade in the Water** — Spirituals / the “Sorrow Songs” *(1800s)*
+3. **Downhearted Blues** — The Blues *(early 1920s)*
+4. **West End Blues** — Jazz *(late 1920s)*
 5. **Precious Lord, Take My Hand** — Gospel *(1930s–40s)*
-6. **Tutti Frutti** — R&B → the birth of Rock ’n’ Roll *(late 1940s–50s)* 📍
-7. **A Change Is Gonna Come** — Soul & Motown *(1960s)* 📍
-8. **Say It Loud** — Funk & the Black Power era *(late 1960s–70s)* 📍
-9. **The Message** — The birth of Hip-Hop *(1973–early 80s)*
-10. **Fight the Power** — The Golden Age, rap as resistance *(late 1980s–90s)* 📍
-11. **Doo-Wop (That Thing)** — Neo-Soul & the new millennium *(late 1990s–2000s)*
-12. **Alright** — The Black Lives Matter era *(2013–present)* 📍
+6. **A Change Is Gonna Come** — Soul & Motown *(1960s)* 📍
+7. **The Message** — The birth of Hip-Hop *(1973–early 80s)*
+8. **F\*\*\* The Police** — The Golden Age, rap as resistance *(late 1980s–90s)* 📍
+9. **Doo-Wop (That Thing)** — Neo-Soul & the new millennium *(late 1990s–2000s)*
+10. **All the Stars** — The Black Lives Matter era *(2013–present)* 📍
 
 ---
 
@@ -89,7 +85,7 @@ the assets serve as-is.
 - **Scroll** (or swipe) to flow down the river.
 - **Era dots** on the right — click to glide to any era.
 - **🔊 Sound** — two layers through one mixer: **real songs** you add per era (see below), and, for any era with no song file, a **synthesized band** (kick / snare / hats / bass / pad) playing a groove tuned to that genre. Between songs the audio goes **"underwater"** — a brief **low-pass filter dip** and crossfade — and jumping across several eras at once plays a quick **flyby montage** of each one.
-- **About & sources** — the full bibliography, grouped by era.
+- Per-era **Sources** links live at the bottom of each era’s panel.
 - Respects `prefers-reduced-motion`, and falls back to a clean readable document if WebGL is unavailable.
 
 ## 🎵 Add the songs (optional)
