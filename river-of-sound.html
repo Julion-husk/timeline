@@ -435,7 +435,6 @@ body.no-webgl #scene, body.no-webgl #overlay, body.no-webgl #intro, body.no-webg
         <button id="sound-toggle" aria-pressed="false" title="Toggle the synthesized ambient bed">
           <span class="s-ico" aria-hidden="true"></span><span class="s-label">Sound off</span>
         </button>
-        <button id="about-toggle" title="About &amp; sources">About &amp; sources</button>
       </div>
     </header>
 
@@ -447,28 +446,6 @@ body.no-webgl #scene, body.no-webgl #overlay, body.no-webgl #intro, body.no-webg
     <!-- Right-side era navigation -->
     <nav id="dots" aria-label="Jump to era"></nav>
 
-  </div>
-
-  <!-- Intro / title card -->
-  <section id="intro">
-    <div class="intro-inner">
-      <p class="kicker">Black Studies Honors · Seattle Public Schools</p>
-      <h1>The River<span>of</span>Sound</h1>
-      <p class="question">How has Black music evolved throughout history —<br>and how does it
-        reflect the issues of its time?</p>
-      <blockquote id="epigraph"></blockquote>
-      <button id="begin">Enter the river <span aria-hidden="true">↓</span></button>
-      <p class="scroll-hint">scroll to begin · jump between eras using the dots once inside</p>
-    </div>
-  </section>
-
-  <!-- About / sources modal -->
-  <div id="about">
-    <div class="about-card">
-      <button id="about-close" aria-label="Close">×</button>
-      <h2>About &amp; sources</h2>
-      <div id="about-body"></div>
-    </div>
   </div>
 
   <script>
@@ -513,24 +490,21 @@ const ERAS = [
   /* 1 ───────────────────────────────────────────────────────── */
   {
     id: "roots",
-    years: "Before 1619",
-    title: "Before the Word, the Drum",
-    genre: "West & Central African roots",
+    years: "Pre-1600s",
+    title: "Basic African Drums",
+    genre: "Origins · West African roots",
     lens: "identity",
-    hook: "“The drum talks; the people answer.”",
+    hook: "",
     body:
-      "Every genre downstream of this point begins in West and Central Africa, where music was never " +
-      "merely entertainment — it was memory, law, worship, and news. The griot carried a community’s " +
-      "entire history in song; the talking drum imitated speech; and everyone answered the leader’s line " +
-      "in <em>call-and-response</em>. When millions were stolen through the Middle Passage, captors could " +
-      "take their freedom but not these tools. Polyrhythm, the bent “blue note,” improvisation, and " +
-      "call-and-response survived in the body — the hidden source code of everything that follows.",
-    voices: ["Griots", "Talking drums", "Polyrhythm", "Call-and-response"],
-    songs: [{ t: "West African drum & griot tradition", a: "" }],
+      "The drums were the predecessor to modern Black music. In West Africa, drums weren’t only an " +
+      "instrument of beat; they were cultural instruments used in ceremonies, storytelling, and " +
+      "communication. Enslaved Africans brought with them drums like the Djembe, bringing those " +
+      "cultural traditions with them.",
+    voices: ["The Djembe", "Ceremony", "Storytelling", "Communication"],
+    songs: [{ t: "West African drum traditions", a: "" }],
     seattle: null,
     sources: [
-      { label: "Smithsonian NMAAHC — Musical Crossroads", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
-      { label: "Smithsonian Music — Musical Crossroads", url: "https://music.si.edu/story/musical-crossroads" },
+      { label: "DrumRoots — The History of the Djembe Drum", url: "https://www.drumroots.org.uk/2025/06/the-fascinating-history-of-the-djembe-drum-a-journey-through-rhythm-and-culture/" },
     ],
     colors: { bg: "#160d07", accent: "#ff9d3c", accent2: "#ffd28a" },
     wave: { amp: 0.80, freq: 1.1, sharp: 0.06, jitter: 0.10, swell: 0.85, speed: 0.45 },
@@ -539,30 +513,23 @@ const ERAS = [
   /* 2 ───────────────────────────────────────────────────────── */
   {
     id: "spirituals",
-    years: "1619 – 1865",
-    title: "Steal Away",
-    genre: "Spirituals · field hollers · work songs",
+    years: "1800s",
+    title: "Wade in the Water",
+    genre: "Sorrow Songs · Spirituals",
     lens: "resistance",
-    hook: "“Wade in the water, children…”",
+    hook: "",
     body:
-      "Enslaved people were forbidden to read, write, or gather freely — so they testified in song. " +
-      "Spirituals and field hollers turned Christian imagery into a double language: “Heaven” could mean " +
-      "the North, the “Jordan” the Ohio River, and <em>Wade in the Water</em> a warning to throw the " +
-      "bloodhounds off the scent. Harriet Tubman is said to have used spirituals as signals on the " +
-      "Underground Railroad. Historians debate how literally any song worked as a map — but whether map " +
-      "or metaphor, the music did real work: it organized hope, preserved dignity, and made a way to " +
-      "endure, and sometimes escape, the unendurable.",
-    voices: ["The ring shout", "Harriet Tubman", "Fisk Jubilee Singers"],
-    songs: [
-      { t: "Wade in the Water", a: "Negro spiritual" },
-      { t: "Swing Low, Sweet Chariot", a: "Negro spiritual" },
-      { t: "Steal Away", a: "Negro spiritual" },
-    ],
+      "Wade in the Water is widely associated with the Underground Railroad. W.E.B. Du Bois called the " +
+      "genre of the acapella song “Sorrow Songs.” This genre was created by enslaved Black Americans. " +
+      "Sorrow songs were very spiritual, but were sometimes encoded with other meanings. Some examples " +
+      "of this are songs being used to communicate immediate alerts along with the escape through the " +
+      "Underground Railroad. Wade in the Water, specifically, has the message of wading through the " +
+      "water to lose bloodhounds’ trail.",
+    voices: ["W.E.B. Du Bois", "Sorrow Songs", "The Underground Railroad"],
+    songs: [{ t: "Wade in the Water", a: "Negro spiritual" }],
     seattle: null,
     sources: [
-      { label: "NMAAHC — Musical Crossroads (Roots & Agency)", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
-      { label: "“Wade in the Water” — Wikipedia", url: "https://en.wikipedia.org/wiki/Wade_in_the_Water" },
-      { label: "WHYY — Decoding Underground Railroad songs", url: "https://whyy.org/articles/underground-railroad-expert-decodes-songs-with-practical-advice-for-fleeing-slaves/" },
+      { label: "American Songwriter — Behind the Meaning of “Wade in the Water”", url: "https://americansongwriter.com/behind-the-meaning-of-the-classic-gospel-song-wade-in-the-water/" },
     ],
     colors: { bg: "#07101f", accent: "#5b8cff", accent2: "#aecbff" },
     wave: { amp: 0.66, freq: 0.9, sharp: 0.0, jitter: 0.04, swell: 1.45, speed: 0.38 },
@@ -571,27 +538,20 @@ const ERAS = [
   /* 3 ───────────────────────────────────────────────────────── */
   {
     id: "blues",
-    years: "c. 1900 – 1920s",
-    title: "Trouble in Mind",
+    years: "Early 1920s",
+    title: "Downhearted Blues",
     genre: "The Blues",
     lens: "power",
-    hook: "“I hate to see that evenin’ sun go down.”",
+    hook: "",
     body:
-      "Freedom on paper met Jim Crow in fact: sharecropping debt, segregation, and the daily threat of " +
-      "violence. Out of the Mississippi Delta came the blues — three chords, twelve bars, and a brutally " +
-      "honest “I.” The blue notes bent between the cracks of the piano keys the way Black life bent around " +
-      "the cracks of the law. W.C. Handy wrote it down, Bessie Smith — the “Empress of the Blues” — sold " +
-      "millions, and the form became the grammar of nearly all American popular music to come. The blues " +
-      "did not cause the sorrow; it <em>named</em> it, and naming it was a kind of power.",
-    voices: ["W.C. Handy", "Bessie Smith", "Ma Rainey", "Robert Johnson"],
-    songs: [
-      { t: "Downhearted Blues", a: "Bessie Smith" },
-      { t: "Cross Road Blues", a: "Robert Johnson" },
-    ],
+      "Downhearted Blues was written by two Black women, Alberta Hunter and Lovie Austin. Over 750 " +
+      "thousand copies were sold and earned Bettie Smith the title, “Empress of the Blues,” showing " +
+      "record labels the audience for blues music is huge and should not be underestimated.",
+    voices: ["Alberta Hunter", "Lovie Austin"],
+    songs: [{ t: "Downhearted Blues", a: "Bessie Smith" }],
     seattle: null,
     sources: [
-      { label: "Britannica — Blues (music)", url: "https://www.britannica.com/art/blues-music" },
-      { label: "NMAAHC — Musical Crossroads", url: "https://nmaahc.si.edu/explore/exhibitions/musical-crossroads" },
+      { label: "Library of Congress — “Down-Hearted Blues” (National Recording Registry)", url: "https://www.loc.gov/static/programs/national-recording-preservation-board/documents/Down-HeartedBlues.pdf" },
     ],
     colors: { bg: "#140a18", accent: "#9a5bff", accent2: "#cfa8ff" },
     wave: { amp: 0.90, freq: 1.5, sharp: 0.10, jitter: 0.16, swell: 0.70, speed: 0.55 },
@@ -600,33 +560,21 @@ const ERAS = [
   /* 4 ───────────────────────────────────────────────────────── */
   {
     id: "jazz",
-    years: "1920s – 1930s",
-    title: "Take the A Train",
-    genre: "Jazz & the Harlem Renaissance",
+    years: "Late 1920s",
+    title: "West End Blues",
+    genre: "Jazz",
     lens: "identity",
-    hook: "“The freedom to invent yourself — even in a segregated room.”",
+    hook: "",
     body:
-      "The Great Migration carried six million Black Americans north and west, toward jobs and away from " +
-      "terror. In crowded new cities the blues went bright and modern and became jazz — improvised, " +
-      "swinging, brand-new. Harlem’s “New Negro” Renaissance made Black art a declaration of full " +
-      "citizenship; Louis Armstrong’s trumpet and Duke Ellington’s orchestra were sonic proof of genius. " +
-      "The contradiction was loud: at the Cotton Club, Black musicians played for whites-only crowds. By " +
-      "1939 Billie Holiday turned this music toward open protest with <em>Strange Fruit</em>, an " +
-      "anti-lynching ballad now called the first modern protest song.",
-    voices: ["Louis Armstrong", "Duke Ellington", "Bessie Smith", "Billie Holiday"],
-    songs: [
-      { t: "Take the A Train", a: "Duke Ellington" },
-      { t: "West End Blues", a: "Louis Armstrong" },
-      { t: "Strange Fruit", a: "Billie Holiday" },
-    ],
-    seattle:
-      "The same years lit up S. Jackson Street, the spine of Seattle’s Central District. Its clubs were " +
-      "among the only rooms in town where Black, white, and Asian residents met as social equals — the " +
-      "cradle of the city’s first real music scene.",
+      "In 1928, King Oliver wrote West End Blues for Louis Armstrong and His Hot Five. The intro changed " +
+      "how the genre of jazz was played and showed that an individual in a band could steal the show " +
+      "with a solo. Billie Holiday was inspired by this intro and song to build her career. Louis " +
+      "Armstrong went on to become the greatest jazz artist of all time.",
+    voices: ["King Oliver", "Louis Armstrong", "Billie Holiday"],
+    songs: [{ t: "West End Blues", a: "Louis Armstrong" }],
+    seattle: null,
     sources: [
-      { label: "HistoryLink — Jackson Street Jazz Scene (Seattle)", url: "https://www.historylink.org/File/22930" },
-      { label: "HistoryLink — Rhythm & Roots: Seattle’s First Sound", url: "https://www.historylink.org/File/3641" },
-      { label: "Britannica — “Strange Fruit”", url: "https://www.britannica.com/topic/Strange-Fruit-song" },
+      { label: "uDiscover Music — The Day Jazz Changed Forever", url: "https://www.udiscovermusic.com/stories/the-day-jazz-changed-forever/" },
     ],
     colors: { bg: "#1a1305", accent: "#ffc24a", accent2: "#ffe6a8" },
     wave: { amp: 0.80, freq: 3.2, sharp: 0.12, jitter: 0.46, swell: 0.60, speed: 1.00 },
@@ -661,39 +609,6 @@ const ERAS = [
     wave: { amp: 1.05, freq: 1.3, sharp: 0.05, jitter: 0.08, swell: 1.6, speed: 0.50 },
   },
 
-  /* 6 ───────────────────────────────────────────────────────── */
-  {
-    id: "rocknroll",
-    years: "late 1940s – 1950s",
-    title: "Tutti Frutti",
-    genre: "Rhythm & Blues → the birth of Rock ’n’ Roll",
-    lens: "power",
-    hook: "“They integrated the teenagers faster than the law integrated the schools.”",
-    body:
-      "After the war, gospel’s fire and the blues’ beat collided into rhythm & blues, then rock ’n’ roll. " +
-      "Chuck Berry’s storytelling and Little Richard’s scream were Black, defiant, and explosively new — " +
-      "Berry called his style “one long Sister Rosetta Tharpe impersonation.” But the color line ran " +
-      "straight through the charts: white artists covered Black songs for bigger sales and softer radio, " +
-      "and a sanitized “King” was crowned while the inventors were pushed to the margins. The music " +
-      "integrated American teenagers years before the law integrated their schools.",
-    voices: ["Chuck Berry", "Little Richard", "Fats Domino", "Big Mama Thornton"],
-    songs: [
-      { t: "Tutti Frutti", a: "Little Richard" },
-      { t: "Johnny B. Goode", a: "Chuck Berry" },
-    ],
-    seattle:
-      "In 1948 a blind 17-year-old named Ray Charles stepped off a bus and cut his first records here; " +
-      "his Maxin Trio gigged on Jackson Street alongside teenage Quincy Jones and Ernestine Anderson. " +
-      "Seattle’s scene helped raise three future legends.",
-    sources: [
-      { label: "HistoryLink — Jackson Street Jazz Scene (Ray Charles, 1948)", url: "https://www.historylink.org/File/22930" },
-      { label: "HistoryLink — Quincy Jones (1933–2024)", url: "https://historylink.org/File/10354" },
-      { label: "Britannica — Sister Rosetta Tharpe", url: "https://www.britannica.com/biography/Sister-Rosetta-Tharpe" },
-    ],
-    colors: { bg: "#1a0707", accent: "#ff5a4d", accent2: "#ffb38f" },
-    wave: { amp: 0.95, freq: 2.4, sharp: 0.35, jitter: 0.12, swell: 0.50, speed: 0.92 },
-  },
-
   /* 7 ───────────────────────────────────────────────────────── */
   {
     id: "soul",
@@ -723,39 +638,6 @@ const ERAS = [
     ],
     colors: { bg: "#1a0a14", accent: "#ff5e8a", accent2: "#ffb37e" },
     wave: { amp: 0.85, freq: 1.7, sharp: 0.08, jitter: 0.10, swell: 0.85, speed: 0.60 },
-  },
-
-  /* 8 ───────────────────────────────────────────────────────── */
-  {
-    id: "funk",
-    years: "late 1960s – 1970s",
-    title: "Say It Loud",
-    genre: "Funk & the Black Power era",
-    lens: "identity",
-    hook: "“Say it loud — I’m Black and I’m proud.”",
-    body:
-      "When nonviolence met fire hoses and assassinations, the mood hardened from <em>hope</em> to " +
-      "<em>pride and power</em>. In 1968 James Brown released “Say It Loud — I’m Black and I’m Proud,” and " +
-      "a generation traded the word “Negro” for “Black.” Funk made the downbeat — “the One” — heavy and " +
-      "unapologetic; Sly Stone, Gil Scott-Heron (“The Revolution Will Not Be Televised”), and " +
-      "Parliament-Funkadelic turned liberation into something you could dance to. Marvin Gaye’s " +
-      "<em>What’s Going On</em> (1971) mourned Vietnam, poverty, and a planet in trouble.",
-    voices: ["James Brown", "Sly & the Family Stone", "Gil Scott-Heron", "Marvin Gaye"],
-    songs: [
-      { t: "Say It Loud – I’m Black and I’m Proud", a: "James Brown" },
-      { t: "Star-Spangled Banner (Live at Woodstock)", a: "Jimi Hendrix" },
-      { t: "What’s Going On", a: "Marvin Gaye" },
-    ],
-    seattle:
-      "At Woodstock in 1969, Garfield High’s own Jimi Hendrix tore “The Star-Spangled Banner” into sirens " +
-      "and screams — a Black Seattleite forcing America to hear its own anthem through the chaos of war.",
-    sources: [
-      { label: "“Say It Loud – I’m Black and I’m Proud” — Wikipedia", url: "https://en.wikipedia.org/wiki/Say_It_Loud_%E2%80%93_I%27m_Black_and_I%27m_Proud" },
-      { label: "JimiHendrix.com — Star-Spangled Banner at Woodstock", url: "https://www.jimihendrix.com/editorial/star-spangled-banner-jimi-hendrix-at-woodstock-the-anthem-of-a-generation/" },
-      { label: "HistoryLink — Jimi Hendrix (1942–1970)", url: "https://www.historylink.org/file/2498" },
-    ],
-    colors: { bg: "#0f061a", accent: "#b6ff3a", accent2: "#ff5ee6" },
-    wave: { amp: 1.00, freq: 2.2, sharp: 0.50, jitter: 0.20, swell: 0.50, speed: 0.95 },
   },
 
   /* 9 ───────────────────────────────────────────────────────── */
@@ -1504,7 +1386,6 @@ function maxScroll() {
 }
 function onScroll() {
   pTarget = clamp(window.scrollY / maxScroll(), 0, 1);
-  if (window.scrollY > 40) hideIntro();
 }
 
 function tick(now) {
@@ -1608,7 +1489,7 @@ function showEra(i) {
     </div>
     <h2 class="p-title">${era.title}</h2>
     <p class="p-genre">${era.genre}</p>
-    <p class="p-hook">${era.hook}</p>
+    ${era.hook ? `<p class="p-hook">${era.hook}</p>` : ""}
     <p class="p-body">${era.body}</p>
     <div class="p-voices">${era.voices.map(v => `<span>${v}</span>`).join("")}</div>
     ${seattleHTML}
@@ -1649,7 +1530,6 @@ function buildDots() {
 }
 
 function scrollToEra(i) {
-  hideIntro();
   const targetP = (i + 0.5) / N;
   const targetY = targetP * maxScroll();
   smoothScrollTo(targetY, REDUCE ? 0 : 1100);
@@ -1668,47 +1548,6 @@ function smoothScrollTo(targetY, duration) {
   }
   requestAnimationFrame(step);
 }
-
-/* ---- intro overlay ---- */
-let introHidden = false;
-function hideIntro() {
-  if (introHidden) return;
-  introHidden = true;
-  $("#intro").classList.add("gone");
-}
-
-/* ---- about / sources modal ---- */
-function buildAbout() {
-  const body = $("#about-body");
-  const list = ERAS.map((e) => `
-    <div class="src-era">
-      <h4><span style="color:${e.colors.accent}">●</span> ${e.years} — ${e.title}</h4>
-      <ul>${e.sources.map(s => `<li><a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a></li>`).join("")}</ul>
-    </div>`).join("");
-  body.innerHTML = `
-    <p class="about-lead">An interactive answer to the question:
-      <em>“How has Black music evolved throughout history, and how does it reflect
-      the issues of its time?”</em></p>
-    <p>Made from the standpoint of an 11th-grade <strong>Black Studies Honors</strong>
-      student in <strong>Seattle Public Schools</strong>. Each era is read through one of
-      the four lenses of the SPS / Washington Ethnic Studies framework — Origins &amp;
-      Identity, Power &amp; Oppression, Resistance &amp; Liberation, and Reflection &amp;
-      Action — and four “📍 Seattle” threads follow the music home to the Central District:
-      the Jackson Street jazz scene, Ray Charles &amp; Quincy Jones, Jimi Hendrix, and
-      Sir Mix-a-Lot.</p>
-    <p class="about-epi">“${EPIGRAPH.lines.join(" ")}”<br><span>— ${EPIGRAPH.attribution}</span></p>
-    <p class="about-method">Built with Three.js. The flowing “river” is a single audio
-      waveform whose amplitude, frequency, attack, and harmony are re-shaped for every
-      genre — sparse call-and-response swells for the spirituals, syncopated flutter for
-      jazz, hard square-wave boom-bap for hip-hop. The optional sound is fully synthesized
-      (no copyrighted recordings). Song links open a search so you can hear the originals.</p>
-    <h3>All sources, by era</h3>
-    <div class="src-grid">${list}</div>
-  `;
-}
-
-function openAbout() { $("#about").classList.add("open"); }
-function closeAbout() { $("#about").classList.remove("open"); }
 
 /* ================================================================== *
  *  FALLBACK (no WebGL) — a fully readable vertical document
@@ -1749,27 +1588,12 @@ function buildFallback() {
 /* ================================================================== *
  *  BOOT
  * ================================================================== */
-function fillIntro() {
-  $("#epigraph").innerHTML =
-    EPIGRAPH.lines.map(l => `<span>${l}</span>`).join("") +
-    `<cite>— ${EPIGRAPH.attribution}</cite>`;
-}
-
 function bindControls() {
   audio.onStatus = (s) => { lastStatus = s; updateSoundBtn(); };
-  $("#begin").addEventListener("click", () => {
-    hideIntro();
-    scrollToEra(0);
-    if (!REDUCE) audio.enable().then(updateSoundBtn);
-  });
   $("#sound-toggle").addEventListener("click", async () => {
     await audio.toggle();
     updateSoundBtn();
   });
-  $("#about-toggle").addEventListener("click", openAbout);
-  $("#about-close").addEventListener("click", closeAbout);
-  $("#about").addEventListener("click", (e) => { if (e.target.id === "about") closeAbout(); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape") closeAbout(); });
 
   addEventListener("pointermove", (e) => {
     mouse.tx = (e.clientX / innerWidth - 0.5) * 2;
@@ -1789,9 +1613,7 @@ function updateSoundBtn() {
 }
 
 function main() {
-  fillIntro();
   buildDots();
-  buildAbout();
   bindControls();
 
   if (!renderer) return; // fallback already rendered
