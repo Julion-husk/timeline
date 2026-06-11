@@ -67,6 +67,13 @@ const SYNTH = {
   blm:        { bpm: 76,  swing: .1,  root: 0,  bassWave: "sine", pad: [0, 5, 7, 12],
                 kick: "x-------x---x---", snare: "--------x-------", hat: "xxxxxxxxxxxxxxxx",
                 bass: [0,null,null,null,null,null,null,null,7,null,null,null,5,null,null,null] },
+  // swing-era jazz (Ellington) and Motown soul grooves
+  swing:      { bpm: 124, swing: .34, root: 0,  bassWave: "sine", pad: [0, 4, 7, 11, 14],
+                kick: "x-------x-------", snare: "--x---x---x---x-", hat: "x-xxx-xxx-xxx-xx",
+                bass: [0,null,4,null,7,null,9,null,7,null,4,null,2,null,0,null] },
+  motown:     { bpm: 102, swing: .16, root: 0,  bassWave: "triangle", pad: [0, 4, 9, 11],
+                kick: "x-----x-x-----x-", snare: "----x-------x---", hat: "x-x-x-x-x-x-x-x-",
+                bass: [0,null,null,4,null,null,7,null,9,null,7,null,4,null,null,null] },
 };
 
 export class AudioEngine {

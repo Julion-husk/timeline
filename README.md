@@ -33,10 +33,10 @@ Studies framework** — the same ones used in the course it was built for:
 | **Reflection & Action** | What is this generation choosing to do about it? |
 
 ### 📍 The Seattle thread
-Because the standpoint is *Seattle*, the river keeps coming home to the **Central
-District**:
+The inquiry question — *How has Black music evolved throughout history, and how does
+it reflect the issues of time?* — sits under the title in the top bar. And because the
+standpoint is *Seattle*, the river still comes home to the **Central District**:
 
-- **Soul** — a young **Jimi Hendrix** teaching himself guitar in the Central District.
 - **Golden-Age hip-hop** — **Sir Mix-a-Lot**’s *Posse on Broadway* and the **Nastymix** label “put Seattle on the rap map.”
 
 ---
@@ -47,8 +47,8 @@ District**:
 2. **Wade in the Water** — Spirituals / the “Sorrow Songs” *(1800s)*
 3. **Downhearted Blues** — The Blues *(early 1920s)*
 4. **West End Blues** — Jazz *(late 1920s)*
-5. **Precious Lord, Take My Hand** — Gospel *(1930s–40s)*
-6. **A Change Is Gonna Come** — Soul & Motown *(1960s)* 📍
+5. **It Don’t Mean a Thing (If It Ain’t Got That Swing)** — Swing-era jazz *(1930s–40s)*
+6. **My Girl** — Motown *(1960s)*
 7. **The Message** — The birth of Hip-Hop *(1973–early 80s)*
 8. **F\*\*\* The Police** — The Golden Age, rap as resistance *(late 1980s–90s)* 📍
 9. **Doo-Wop (That Thing)** — Neo-Soul & the new millennium *(late 1990s–2000s)*

@@ -126,59 +126,48 @@ export const ERAS = [
 
   /* 5 ───────────────────────────────────────────────────────── */
   {
-    id: "gospel",
+    id: "swing",
     years: "1930s – 1940s",
-    title: "Precious Lord, Take My Hand",
-    genre: "Gospel",
+    title: "It Don’t Mean a Thing (If It Ain’t Got That Swing)",
+    genre: "Swing-era jazz",
     lens: "identity",
-    hook: "“The safest room in America to be fully, joyfully Black.”",
+    hook: "“It don’t mean a thing if it ain’t got that swing.”",
     body:
-      "During the Depression, Thomas A. Dorsey fused blues feeling with sacred words to invent gospel — " +
-      "and the Black church became a sanctuary where Black joy and grief could be voiced without apology. " +
-      "Mahalia Jackson’s voice could hold a whole congregation; Sister Rosetta Tharpe plugged in an " +
-      "electric guitar and, with holy distortion, essentially invented the sound of rock and roll a decade " +
-      "early. Gospel built the muscle — the choirs, the cadences, the organizing networks — that would " +
-      "soon power the Civil Rights Movement from the pew to the street.",
-    voices: ["Thomas A. Dorsey", "Mahalia Jackson", "Sister Rosetta Tharpe"],
-    songs: [
-      { t: "Take My Hand, Precious Lord", a: "Mahalia Jackson" },
-      { t: "Strange Things Happening Every Day", a: "Sister Rosetta Tharpe" },
-    ],
+      "Made in 1932, this song by Duke Ellington became an instant hit as it mixed a calming melody with a " +
+      "catchy rhythm. Duke Ellington was a very famous composer during this time, and he was especially " +
+      "known for his more unique pieces of jazz that really highlighted individual instruments in each of " +
+      "his works. Both Duke Ellington and this song elevated jazz in a way that no one else could have at " +
+      "the time. This song also popularized the use of the word “swing” to the public. It was a slang term " +
+      "in jazz, but he allowed the public to see and understand what it meant.",
+    voices: ["Duke Ellington"],
+    songs: [{ t: "It Don’t Mean a Thing (If It Ain’t Got That Swing)", a: "Duke Ellington" }],
     seattle: null,
     sources: [
-      { label: "Britannica — Sister Rosetta Tharpe", url: "https://www.britannica.com/biography/Sister-Rosetta-Tharpe" },
-      { label: "PBS American Masters — Sister Rosetta Tharpe", url: "https://www.pbs.org/wnet/americanmasters/sister-rosetta-tharpe-about-film/2463/" },
+      { label: "“It Don’t Mean a Thing…” (1932, Duke Ellington) — Swing & Beyond", url: "https://swingandbeyond.com/2016/09/01/it-dont-mean-a-thing-if-it-aint-got-that-swing-1932-duke-ellington/" },
     ],
     colors: { bg: "#1a0820", accent: "#d8b13a", accent2: "#ff9ed1" },
-    wave: { amp: 1.05, freq: 1.3, sharp: 0.05, jitter: 0.08, swell: 1.6, speed: 0.50 },
+    wave: { amp: 0.85, freq: 2.6, sharp: 0.14, jitter: 0.40, swell: 0.6, speed: 0.95 },
   },
 
   /* 6 ───────────────────────────────────────────────────────── */
   {
-    id: "soul",
+    id: "motown",
     years: "1960s",
-    title: "A Change Is Gonna Come",
-    genre: "Soul & Motown",
+    title: "My Girl",
+    genre: "Motown · soul & R&B",
     lens: "resistance",
-    hook: "“R-E-S-P-E-C-T.”",
+    hook: "“I’ve got sunshine on a cloudy day.”",
     body:
-      "As the Civil Rights Movement marched, soul gave it a heartbeat. Motown’s Berry Gordy engineered " +
-      "crossover hits that put Black faces and voices into white American living rooms — integration by " +
-      "airwave. Aretha Franklin spelled the movement’s demand in a single word: R-E-S-P-E-C-T. And in " +
-      "1964, after being turned away from a whites-only motel, Sam Cooke wrote <em>A Change Is Gonna " +
-      "Come</em>, a hymn of weary hope that became the movement’s unofficial anthem. Soul insisted that " +
-      "Black dignity was not up for negotiation.",
-    voices: ["Sam Cooke", "Aretha Franklin", "The Motown sound", "Curtis Mayfield"],
-    songs: [
-      { t: "A Change Is Gonna Come", a: "Sam Cooke" },
-      { t: "Respect", a: "Aretha Franklin" },
-    ],
-    seattle:
-      "Across town, a left-handed kid from the Central District named Jimmy Hendrix was teaching himself " +
-      "guitar — soon to leave Seattle and remake the instrument itself.",
+      "My Girl by The Temptations was created in 1964 and has since become a very classic and popular " +
+      "song. It is a mix of soul and R&B music, which creates the music genre of Motown. This genre was " +
+      "most popular in the 60s and 70s, but many of the songs created during that time are still very " +
+      "popular to this day. Some notable songs of this genre include “My Girl,” “Super Freak,” and “Just " +
+      "the Two of Us.”",
+    voices: ["The Temptations", "Motown"],
+    songs: [{ t: "My Girl", a: "The Temptations" }],
+    seattle: null,
     sources: [
-      { label: "Library of Congress — “A Change Is Gonna Come” (National Recording Registry)", url: "https://www.loc.gov/static/programs/national-recording-preservation-board/documents/AChangeIsGonnaCome.pdf" },
-      { label: "“A Change Is Gonna Come” — Wikipedia", url: "https://en.wikipedia.org/wiki/A_Change_Is_Gonna_Come" },
+      { label: "The Temptations, “My Girl” — uDiscover Music", url: "https://www.udiscovermusic.com/stories/the-temptations-my-girl-motown-song/" },
     ],
     colors: { bg: "#1a0a14", accent: "#ff5e8a", accent2: "#ffb37e" },
     wave: { amp: 0.85, freq: 1.7, sharp: 0.08, jitter: 0.10, swell: 0.85, speed: 0.60 },
