@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>The River of Sound — How Black Music Reflects Its Time</title>
+<meta name="description" content="An interactive 3D timeline of Black music history, from West African drums to Black Lives Matter — built from the standpoint of a Black Studies Honors student in Seattle Public Schools." />
+<meta name="theme-color" content="#0a0a0a" />
+
+<!-- Favicon: a tiny waveform -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0a'/%3E%3Cpath d='M3 16 Q7 4 11 16 T19 16 T27 16' fill='none' stroke='%23ffd23f' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E" />
+
+<!-- Type: graceful system fallbacks if the network is unavailable -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="./css/style.css" />
+
+<!-- Three.js r160 from the local vendored copy (no network needed).
+     Served over http(s) this needs a browser with import-map support; for the
+     most universal option (any browser, double-click or URL), use the
+     self-contained river-of-sound.html build instead. -->
+<script type="importmap">
+{ "imports": { "three": "./vendor/three.module.js" } }
+</script>
+</head>
+<body>
+
+  <!-- The 3D river -->
+  <canvas id="scene" aria-hidden="true"></canvas>
+
+  <!-- Tall invisible element that provides the scroll distance -->
+  <div id="scroll-space"></div>
+
+  <!-- Fixed UI overlay -->
+  <div id="overlay">
+
+    <header id="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span class="brand-text">The River of Sound</span>
+      </div>
+      <div class="top-actions">
+        <button id="sound-toggle" aria-pressed="false" title="Toggle the synthesized ambient bed">
+          <span class="s-ico" aria-hidden="true"></span><span class="s-label">Sound off</span>
+        </button>
+        <button id="about-toggle" title="About &amp; sources">About &amp; sources</button>
+      </div>
+    </header>
+
+    <div id="progress"><div id="progress-fill"></div></div>
+
+    <!-- The active-era reading panel -->
+    <article id="panel" aria-live="polite"></article>
+
+    <!-- Right-side era navigation -->
+    <nav id="dots" aria-label="Jump to era"></nav>
+
+  </div>
+
+  <!-- Intro / title card -->
+  <section id="intro">
+    <div class="intro-inner">
+      <p class="kicker">Black Studies Honors · Seattle Public Schools</p>
+      <h1>The River<span>of</span>Sound</h1>
+      <p class="question">How has Black music evolved throughout history —<br>and how does it
+        reflect the issues of its time?</p>
+      <blockquote id="epigraph"></blockquote>
+      <button id="begin">Enter the river <span aria-hidden="true">↓</span></button>
+      <p class="scroll-hint">scroll to begin · jump between eras using the dots once inside</p>
+    </div>
+  </section>
+
+  <!-- About / sources modal -->
+  <div id="about">
+    <div class="about-card">
+      <button id="about-close" aria-label="Close">×</button>
+      <h2>About &amp; sources</h2>
+      <div id="about-body"></div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/timeline.js"></script>
+</body>
+</html>
