@@ -176,27 +176,25 @@ export const ERAS = [
   /* 7 ───────────────────────────────────────────────────────── */
   {
     id: "hiphop",
-    years: "1973 – early 1980s",
+    years: "Early 1980s",
     title: "The Message",
-    genre: "The birth of Hip-Hop",
-    lens: "identity",
+    genre: "Conscious hip-hop",
+    lens: "resistance",
     hook: "“It’s like a jungle sometimes…”",
     body:
-      "The post–Civil-Rights city was broke and burning — factories gone, the Bronx literally on fire, " +
-      "public schools cutting music. On August 11, 1973, at a back-to-school party, DJ Kool Herc looped " +
-      "the drum “break” of a record across two turntables, and dancers and rappers filled the space the " +
-      "city had abandoned. From nothing — no budget, no instruments, just records, a mic, and a lamppost " +
-      "to plug into — came a whole new art form. In 1982, Grandmaster Flash & the Furious Five’s " +
-      "<em>The Message</em> put inner-city reality into rhyme and pushed the MC to the front.",
-    voices: ["DJ Kool Herc", "Afrika Bambaataa", "Grandmaster Flash", "The Sugarhill Gang"],
-    songs: [
-      { t: "The Message", a: "Grandmaster Flash & the Furious Five" },
-      { t: "Rapper’s Delight", a: "The Sugarhill Gang" },
-    ],
+      "Arising from the harsh conditions of inner-city life in New York, “The Message” was, as its name " +
+      "stated, a letter to the people of the city, primarily about the living conditions and lack of " +
+      "compassion within it. “I can’t take the smell, can’t take the noise, got no money to move out, I " +
+      "guess I got no choice.” Grandmaster Flash used this song as a call to action, a change in the " +
+      "standard music scene of the time. In the song, he describes the vivid image of mistreated city " +
+      "blocks and poorly managed streets, juxtaposed with hopeful lyrics of chance and possibility. “The " +
+      "Message” changed the rap scene across the world; it opened a new genre of activism rap, steering " +
+      "away from the stereotype of primarily negative connotation.",
+    voices: ["Grandmaster Flash", "The Furious Five"],
+    songs: [{ t: "The Message", a: "Grandmaster Flash & the Furious Five" }],
     seattle: null,
     sources: [
-      { label: "History.com — Hip-hop is born in the Bronx (Aug 11, 1973)", url: "https://www.history.com/this-day-in-history/august-11/hip-hop-is-born-at-a-birthday-party-in-the-bronx" },
-      { label: "Library of Congress — “The Message” (National Recording Registry)", url: "https://www.loc.gov/static/programs/national-recording-preservation-board/documents/TheMessage.pdf" },
+      { label: "“The Message” by Grandmaster Flash & the Furious Five — Medium", url: "https://hiphopheadsza.medium.com/the-message-by-grandmaster-flash-and-the-furious-five-8f4ccaa6772f" },
     ],
     colors: { bg: "#0b0b10", accent: "#46e0ff", accent2: "#ff5ea8" },
     wave: { amp: 1.10, freq: 2.0, sharp: 0.72, jitter: 0.16, swell: 0.40, speed: 0.82 },
@@ -223,10 +221,7 @@ export const ERAS = [
       { t: "Fight the Power", a: "Public Enemy" },
       { t: "F*** The Police", a: "N.W.A" },
     ],
-    seattle:
-      "Sir Mix-a-Lot’s “Posse on Broadway” (1988) — cruising Seattle’s own streets — and his Nastymix " +
-      "label “put Seattle on the rap map,” proving the culture belonged to the whole country, not just " +
-      "the coasts.",
+    seattle: null,
     sources: [
       { label: "“Fight the Power” (Public Enemy) — Wikipedia", url: "https://en.wikipedia.org/wiki/Fight_the_Power_(Public_Enemy_song)" },
       { label: "“F*** tha Police” (N.W.A) — Wikipedia", url: "https://en.wikipedia.org/wiki/Fuck_tha_Police" },
@@ -288,10 +283,7 @@ export const ERAS = [
       { t: "Alright", a: "Beyoncé" },
       { t: "This Is America", a: "Childish Gambino" },
     ],
-    seattle:
-      "In 2020, Seattle hosted some of the nation’s largest George Floyd protests and the Capitol Hill " +
-      "protest zone — the river of sound flowing right past the same Central District where it first " +
-      "reached this city a century ago.",
+    seattle: null,
     sources: [
       { label: "“Alright” (Kendrick Lamar) — Wikipedia", url: "https://en.wikipedia.org/wiki/Alright_(Kendrick_Lamar_song)" },
       { label: "NPR — “Alright,” party and protest (American Anthem)", url: "https://www.npr.org/2019/08/26/753511135/kendrick-lamar-alright-american-anthem-party-protest" },

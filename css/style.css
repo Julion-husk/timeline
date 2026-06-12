@@ -174,17 +174,6 @@ body.no-webgl::after{ display:none; }
   border:1px solid var(--hair); border-radius:999px; padding:3px 9px;
 }
 
-.seattle{
-  margin:14px 0 6px; padding:12px 14px;
-  background:linear-gradient(180deg, rgba(46,160,110,.14), rgba(46,160,110,.05));
-  border:1px solid rgba(64,200,140,.32); border-radius:11px;
-  font-size:13px; line-height:1.55; color:#e8f3ec;
-}
-.seattle .pin{
-  display:inline-block; font-weight:600; color:#5fe0a8; margin-right:6px;
-  font-size:11px; letter-spacing:.04em;
-}
-
 .p-label{
   font-size:10px; letter-spacing:.18em; text-transform:uppercase;
   color:var(--ink-dim); margin:16px 0 8px;
@@ -352,7 +341,6 @@ body.no-webgl #scene, body.no-webgl #overlay, body.no-webgl #intro, body.no-webg
 .fb-genre{ font-style:italic; color:var(--b); margin:0 0 14px; }
 .fb-body{ font-size:16px; line-height:1.7; }
 .fb-body em{ color:var(--b); }
-.fb-seattle{ background:rgba(46,160,110,.1); border:1px solid rgba(64,200,140,.3); border-radius:10px; padding:12px 16px; font-size:14.5px; }
 .fb-voices,.fb-listen,.fb-src{ font-size:13.5px; color:var(--ink-dim); line-height:1.6; }
 .fb-era a{ color:var(--a); text-decoration:none; }
 .fb-era a:hover{ text-decoration:underline; }

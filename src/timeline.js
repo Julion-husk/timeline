@@ -355,9 +355,6 @@ function showEra(i) {
   const srcHTML = era.sources.map((s) =>
     `<a href="${s.url}" target="_blank" rel="noopener">${s.label} ↗</a>`).join("");
 
-  const seattleHTML = era.seattle
-    ? `<div class="seattle"><span class="pin">📍 Seattle</span>${era.seattle}</div>` : "";
-
   const html = `
     <div class="p-top">
       <span class="lens lens-${era.lens}">${lens.label}</span>
@@ -368,7 +365,6 @@ function showEra(i) {
     <p class="p-hook">${era.hook}</p>
     <p class="p-body">${era.body}</p>
     <div class="p-voices">${era.voices.map(v => `<span>${v}</span>`).join("")}</div>
-    ${seattleHTML}
     <div class="p-label">Listen</div>
     <div class="p-songs">${songsHTML}</div>
     <div class="p-label">Sources</div>
@@ -448,7 +444,6 @@ function buildFallback() {
         <h2>${e.title}</h2>
         <p class="fb-genre">${e.genre}</p>
         <p class="fb-body">${e.body}</p>
-        ${e.seattle ? `<p class="fb-seattle"><strong>📍 Seattle —</strong> ${e.seattle}</p>` : ""}
         <p class="fb-voices"><strong>Voices:</strong> ${e.voices.join(" · ")}</p>
         <p class="fb-listen"><strong>Listen:</strong> ${e.songs.filter(s => s.t).map(s =>
           `<a href="${listenURL(s)}" target="_blank" rel="noopener">${s.t}${s.a ? ` (${s.a})` : ""}</a>`).join(" · ")}</p>
